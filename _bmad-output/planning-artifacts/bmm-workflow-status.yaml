@@ -1,0 +1,6 @@
+# BMM Workflow Status
+# Tracks completion status of planning workflows
+
+workflow_status:
+  product-brief: _bmad-output/planning-artifacts/product-brief-EzyWine_ProPlus-2026-02-22.md
+  product-brief-completed: 2026-02-22

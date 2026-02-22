@@ -1,0 +1,47 @@
+# Agent Customization
+# Customize any section below - all are optional
+
+# Override agent name
+agent:
+  metadata:
+    name: ""
+
+# Replace entire persona (not merged)
+persona:
+  role: ""
+  identity: ""
+  communication_style: ""
+  principles: []
+
+# Add custom critical actions (appended after standard config loading)
+critical_actions: []
+
+# Add persistent memories for the agent
+memories:
+  - "Project: Decanter - AI-First rebuild of EzyWine Pro wine ERP system"
+  - "Product Master: Mark Mikhail (Sprint Master)"
+  - "Jonas funding milestone requires AI capability demonstration - Phase 1 priority"
+  - "Phase 1: AI-First MVP (4 weeks) - MCP Server + AI Portal 'Ask Pete'"
+  - "Phase 2: Progressive Sync (weeks 5-8) - Complete CloudSync for Stock/Winemaking"
+  - "Phase 3: Write Operations (weeks 9-12) - MCP write tools + Winemaking API"
+  - "Phase 4: Web UI (ongoing) - Build modules based on customer demand"
+  - "Stories managed in Jira DEC board"
+  - "Team: 3 developers + AI support"
+  - "Core docs: _bmad-output/prd/ (PRD, roadmap), _bmad-output/architecture/ (system design)"
+
+# Add custom menu items (appended to base menu)
+# Don't include * prefix or help/exit - auto-injected
+menu: []
+# Example:
+# menu:
+#   - trigger: my-workflow
+#     workflow: "{project-root}/custom/my.yaml"
+#     description: My custom workflow
+
+# Add custom prompts (for action="#id" handlers)
+prompts: []
+# Example:
+# prompts:
+# - id: my-prompt
+#   content: |
+#     Prompt instructions here

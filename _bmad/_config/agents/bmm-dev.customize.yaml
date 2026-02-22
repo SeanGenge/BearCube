@@ -1,0 +1,46 @@
+# Agent Customization
+# Customize any section below - all are optional
+
+# Override agent name
+agent:
+  metadata:
+    name: ""
+
+# Replace entire persona (not merged)
+persona:
+  role: ""
+  identity: ""
+  communication_style: ""
+  principles: []
+
+# Add custom critical actions (appended after standard config loading)
+critical_actions: []
+
+# Add persistent memories for the agent
+memories:
+  - "Legacy codebase: ezywine/ (VB.NET, DevExpress v21.2, .NET 4.5.2, solution: EzyWine.WinUI.sln)"
+  - "New API: ezyproplus-api/ (FastAPI, SQLAlchemy 2.0, Pydantic 2.0, Python)"
+  - "CloudSync bridge: ezyproplus-cloudsync/ (.NET 10, C#, 393 unit tests)"
+  - "CRITICAL: Read CLAUDE.md in each subproject before development - contains architecture guides"
+  - "API module structure: controllers/ → schemas/ → services/ → repositories/ → models/"
+  - "Legacy prefixes: PRD* (Winemaking), SAL* (Sales), STK* (Stock), ARL* (AR), APL* (AP), GLD* (GL)"
+  - "Database: Legacy uses 'recnbr' (decimal) PKs, new uses 'id' (int autoincrement)"
+  - "CloudSync maintains recnbr↔id mapping in cloud_id_mapping table"
+  - "Stock module 90% complete (56 models, 36 endpoints), Winemaking 25% (20 models, 0 endpoints)"
+
+# Add custom menu items (appended to base menu)
+# Don't include * prefix or help/exit - auto-injected
+menu: []
+# Example:
+# menu:
+#   - trigger: my-workflow
+#     workflow: "{project-root}/custom/my.yaml"
+#     description: My custom workflow
+
+# Add custom prompts (for action="#id" handlers)
+prompts: []
+# Example:
+# prompts:
+# - id: my-prompt
+#   content: |
+#     Prompt instructions here

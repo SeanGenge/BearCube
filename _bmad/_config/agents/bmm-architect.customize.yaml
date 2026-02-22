@@ -1,0 +1,45 @@
+# Agent Customization
+# Customize any section below - all are optional
+
+# Override agent name
+agent:
+  metadata:
+    name: ""
+
+# Replace entire persona (not merged)
+persona:
+  role: ""
+  identity: ""
+  communication_style: ""
+  principles: []
+
+# Add custom critical actions (appended after standard config loading)
+critical_actions: []
+
+# Add persistent memories for the agent
+memories:
+  - "Project: Decanter - AI-First rebuild of EzyWine Pro (legacy VB.NET → cloud platform)"
+  - "Hybrid Pragmatic architecture: Legacy VB.NET continues as primary while AI capabilities added progressively"
+  - "Legacy scale: 828 tables, 12,857 VB.NET source files, 143 WinForms modules, 17 business domains"
+  - "Tech stack: FastAPI (Python) backend, Next.js frontend, Azure SQL, Azure hosting"
+  - "CloudSync bridge (.NET 10) handles bidirectional legacy-to-cloud data sync"
+  - "MCP Server connects directly to legacy DB for AI Portal 'Ask Pete' (Phase 1 read-only)"
+  - "Phase 1 priority: AI-First MVP in 4 weeks (Major milestone)"
+  - "Key paths: ezywine/ (legacy), ezyproplus-api/ (API), ezyproplus-cloudsync/ (CloudSync)"
+
+# Add custom menu items (appended to base menu)
+# Don't include * prefix or help/exit - auto-injected
+menu: []
+# Example:
+# menu:
+#   - trigger: my-workflow
+#     workflow: "{project-root}/custom/my.yaml"
+#     description: My custom workflow
+
+# Add custom prompts (for action="#id" handlers)
+prompts: []
+# Example:
+# prompts:
+# - id: my-prompt
+#   content: |
+#     Prompt instructions here
