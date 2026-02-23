@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BearCube — Design Direction Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS VARIABLES — Honey Bear Palette
+   ============================================ */
+:root {
+  --primary: #14B8A6;
+  --primary-hover: #2DD4BF;
+  --primary-pressed: #0D9488;
+  --primary-subtle: rgba(20, 184, 166, 0.1);
+  --amber: #D97706;
+  --honey: #F59E0B;
+  --amber-muted: #92400E;
+  --bg-base: #141210;
+  --bg-container: #1C1A17;
+  --bg-elevated: #252219;
+  --bg-spotlight: #2E2A22;
+  --border: #3D3830;
+  --border-subtle: #2E2A24;
+  --text-primary: #F5F0EB;
+  --text-secondary: #A8A29E;
+  --text-tertiary: #78716C;
+  --grade-great: #22C55E;
+  --grade-good: #EAB308;
+  --grade-needs-work: #F97316;
+  --grade-poor: #EF4444;
+  --font-ui: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: #0E0D0B;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   STICKY NAV
+   ============================================ */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(20, 18, 16, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 0;
+  padding: 0 24px; height: 48px;
+  overflow-x: auto;
+}
+.top-nav .brand {
+  font-family: var(--font-mono); font-weight: 700; font-size: 14px;
+  color: var(--honey); margin-right: 24px; white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+.top-nav a {
+  color: var(--text-secondary); text-decoration: none; font-size: 13px;
+  font-weight: 500; padding: 12px 14px; white-space: nowrap;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+}
+.top-nav a:hover { color: var(--text-primary); border-bottom-color: var(--primary); }
+
+/* ============================================
+   SECTION LAYOUT
+   ============================================ */
+.direction-section {
+  min-height: 100vh; padding: 80px 24px 48px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.section-header {
+  max-width: 900px; margin: 0 auto 48px;
+}
+.section-header h2 {
+  font-size: 28px; font-weight: 700; margin-bottom: 4px;
+  color: var(--text-primary);
+}
+.section-header .direction-num {
+  font-family: var(--font-mono); font-size: 13px; color: var(--primary);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;
+}
+.section-header .personality {
+  font-size: 15px; color: var(--text-secondary); font-style: italic;
+}
+.mockup-row {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+}
+.mockup-col { display: flex; flex-direction: column; }
+.mockup-label {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;
+}
+
+/* ============================================
+   MOCKUP FRAMES
+   ============================================ */
+.mockup-frame {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 500px;
+  display: flex; flex-direction: column;
+}
+
+/* ============================================
+   SHARED COMPONENTS
+   ============================================ */
+.timer-display {
+  font-family: var(--font-mono); font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.scramble-text {
+  font-family: var(--font-mono); font-size: 13px; color: var(--text-tertiary);
+  line-height: 1.6; word-spacing: 0.15em;
+}
+.phase-bar {
+  display: flex; height: 8px; border-radius: 4px; overflow: hidden; width: 100%;
+}
+.phase-bar .seg { transition: width 0.3s; }
+.phase-bar .seg-cross { background: var(--grade-great); }
+.phase-bar .seg-f2l { background: var(--grade-needs-work); }
+.phase-bar .seg-oll { background: var(--grade-good); }
+.phase-bar .seg-pll { background: var(--grade-good); }
+.phase-labels {
+  display: flex; justify-content: space-between; margin-top: 4px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);
+}
+.stat-value {
+  font-family: var(--font-mono); font-weight: 700; font-size: 18px;
+  color: var(--text-primary);
+}
+.stat-label {
+  font-size: 12px; font-weight: 500; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.coach-text {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+}
+.coach-text strong { color: var(--text-primary); }
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 600; font-family: var(--font-mono);
+}
+.badge-great { background: rgba(34,197,94,0.15); color: var(--grade-great); }
+.badge-good { background: rgba(234,179,8,0.15); color: var(--grade-good); }
+.badge-needs-work { background: rgba(249,115,22,0.15); color: var(--grade-needs-work); }
+.badge-poor { background: rgba(239,68,68,0.15); color: var(--grade-poor); }
+.btn-primary {
+  background: var(--primary); color: #fff; border: none; border-radius: 8px;
+  padding: 8px 20px; font-family: var(--font-ui); font-size: 14px;
+  font-weight: 500; cursor: pointer; transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-ghost {
+  background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 16px; font-family: var(--font-ui);
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.btn-ghost:hover { color: var(--text-primary); border-color: var(--text-tertiary); }
+
+/* Efficiency circle */
+.efficiency-ring {
+  width: 100px; height: 100px; position: relative;
+}
+.efficiency-ring svg { transform: rotate(-90deg); }
+.efficiency-ring .value {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; font-family: var(--font-mono); font-weight: 700;
+  font-size: 24px; color: var(--text-primary);
+}
+
+/* Move dots */
+.move-dots { display: flex; gap: 3px; flex-wrap: wrap; }
+.move-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* Sparkline placeholder */
+.sparkline {
+  display: flex; align-items: flex-end; gap: 2px; height: 24px;
+}
+.sparkline .bar {
+  width: 4px; border-radius: 2px; background: var(--primary);
+  opacity: 0.6; transition: opacity 0.2s;
+}
+.sparkline .bar:hover { opacity: 1; }
+
+/* ============================================
+   DIRECTION 1 — FOCUS FLOW
+   ============================================ */
+.d1-timer {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px; position: relative;
+}
+.d1-timer .scramble-text {
+  position: absolute; top: 20px; left: 24px; right: 24px; text-align: center;
+}
+.d1-timer .timer-display { font-size: 72px; margin-bottom: 8px; }
+.d1-timer .delta {
+  font-family: var(--font-mono); font-size: 14px; color: var(--grade-great);
+  margin-bottom: 32px;
+}
+.d1-debrief {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--bg-container); border-top: 1px solid var(--border-subtle);
+  padding: 16px 24px;
+}
+.d1-debrief .phase-bar { margin-bottom: 8px; }
+.d1-stats-row {
+  display: flex; gap: 24px; justify-content: center;
+  position: absolute; bottom: 100px;
+}
+.d1-stats-row .stat-label { font-size: 11px; }
+.d1-stats-row .stat-value { font-size: 14px; }
+
+/* D1 Analysis */
+.d1-analysis {
+  flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 16px;
+  overflow-y: auto;
+}
+.d1-score-card {
+  display: flex; align-items: center; gap: 20px;
+  background: var(--bg-container); border-radius: 10px; padding: 20px;
+}
+.d1-phase-card {
+  background: var(--bg-container); border-radius: 10px; padding: 20px;
+}
+.d1-phase-detail {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;
+}
+.d1-phase-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 10px; border-radius: 6px; background: var(--bg-elevated);
+  font-size: 13px;
+}
+.d1-phase-row .name { color: var(--text-secondary); }
+.d1-phase-row .time { font-family: var(--font-mono); font-weight: 700; font-size: 14px; }
+.d1-coach-card {
+  background: var(--bg-container); border-radius: 10px; padding: 20px;
+  border-left: 3px solid var(--primary);
+}
+.d1-moves-card {
+  background: var(--bg-container); border-radius: 10px; padding: 20px;
+}
+
+/* ============================================
+   DIRECTION 2 — COMMAND CENTER
+   ============================================ */
+.d2-timer-layout {
+  flex: 1; display: grid; grid-template-columns: 180px 1fr; min-height: 500px;
+}
+.d2-sidebar {
+  background: var(--bg-container); border-right: 1px solid var(--border-subtle);
+  padding: 12px 0; overflow-y: auto;
+}
+.d2-sidebar-header {
+  padding: 4px 12px 8px; font-size: 12px; font-weight: 600;
+  color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border-subtle); margin-bottom: 4px;
+}
+.d2-solve-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 12px; font-family: var(--font-mono); font-size: 13px;
+  cursor: pointer; transition: background 0.15s;
+}
+.d2-solve-row:hover { background: var(--bg-spotlight); }
+.d2-solve-row.active { background: var(--primary-subtle); }
+.d2-solve-row .num { color: var(--text-tertiary); font-size: 11px; width: 24px; }
+.d2-solve-row .time { color: var(--text-primary); font-weight: 700; }
+.d2-solve-row .diff { font-size: 11px; }
+.d2-solve-row .diff.pos { color: var(--grade-poor); }
+.d2-solve-row .diff.neg { color: var(--grade-great); }
+.d2-main {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; padding: 24px;
+}
+.d2-main .scramble-text {
+  position: absolute; top: 16px; left: 24px; right: 24px; text-align: center;
+}
+.d2-main .timer-display { font-size: 64px; margin-bottom: 24px; }
+.d2-debrief {
+  background: var(--bg-container); border-radius: 10px; padding: 16px 20px;
+  width: 100%; max-width: 500px;
+}
+
+/* D2 Analysis — three columns */
+.d2-analysis-layout {
+  flex: 1; display: grid; grid-template-columns: 180px 1fr 260px;
+  min-height: 500px;
+}
+.d2-analysis-main {
+  padding: 16px; overflow-y: auto; border-left: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+}
+.d2-analysis-right {
+  padding: 16px; background: var(--bg-container); overflow-y: auto;
+}
+.d2-timeline {
+  background: var(--bg-elevated); border-radius: 8px; padding: 16px;
+  margin-bottom: 16px;
+}
+.d2-timeline-bar {
+  display: flex; height: 32px; border-radius: 6px; overflow: hidden;
+  margin-bottom: 8px; cursor: pointer;
+}
+.d2-timeline-bar .seg {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: rgba(0,0,0,0.7); transition: filter 0.2s;
+}
+.d2-timeline-bar .seg:hover { filter: brightness(1.2); }
+.d2-move-list {
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.d2-move {
+  font-family: var(--font-mono); font-size: 13px; padding: 3px 6px;
+  border-radius: 4px; background: var(--bg-elevated);
+}
+.d2-move.great { border-bottom: 2px solid var(--grade-great); }
+.d2-move.good { border-bottom: 2px solid var(--grade-good); }
+.d2-move.needs-work { border-bottom: 2px solid var(--grade-needs-work); }
+.d2-move.poor { border-bottom: 2px solid var(--grade-poor); }
+
+/* ============================================
+   DIRECTION 3 — COACH CARD
+   ============================================ */
+.d3-timer {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px; position: relative;
+}
+.d3-timer .scramble-text {
+  position: absolute; top: 20px; left: 24px; right: 24px; text-align: center;
+}
+.d3-timer .timer-display { font-size: 72px; margin-bottom: 40px; }
+.d3-coach-float {
+  background: var(--bg-container); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px 24px; max-width: 420px; width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.d3-coach-float .coach-icon {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; margin-bottom: 8px; color: #fff; font-weight: 700;
+}
+.d3-coach-float .coach-text { margin-bottom: 12px; }
+.d3-expand {
+  font-family: var(--font-ui); font-size: 13px; color: var(--primary);
+  cursor: pointer; display: flex; align-items: center; gap: 4px;
+}
+
+/* D3 Analysis — card grid */
+.d3-analysis {
+  flex: 1; padding: 20px; overflow-y: auto;
+}
+.d3-card-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.d3-card {
+  background: var(--bg-container); border-radius: 12px; padding: 20px;
+  border: 1px solid var(--border-subtle);
+}
+.d3-card.full-width { grid-column: 1 / -1; }
+.d3-card h4 {
+  font-size: 13px; font-weight: 600; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+}
+.d3-card.coach-card {
+  border-left: 3px solid var(--primary);
+  background: linear-gradient(135deg, var(--bg-container), rgba(20,184,166,0.04));
+}
+
+/* ============================================
+   DIRECTION 4 — PHASE TIMELINE
+   ============================================ */
+.d4-timer {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px; position: relative;
+}
+.d4-timer .scramble-text {
+  position: absolute; top: 20px; left: 24px; right: 24px; text-align: center;
+}
+.d4-timer .timer-display { font-size: 72px; margin-bottom: 32px; }
+.d4-timeline-hero {
+  width: 100%; max-width: 500px;
+}
+.d4-timeline-segments {
+  display: flex; height: 40px; border-radius: 8px; overflow: hidden;
+  margin-bottom: 6px;
+}
+.d4-timeline-segments .seg {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; cursor: pointer; transition: filter 0.2s;
+  position: relative;
+}
+.d4-timeline-segments .seg:hover { filter: brightness(1.15); }
+.d4-timeline-segments .seg .seg-label {
+  font-family: var(--font-ui); font-size: 10px; font-weight: 600;
+  color: rgba(0,0,0,0.6); text-transform: uppercase;
+}
+.d4-timeline-segments .seg .seg-time {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+  color: rgba(0,0,0,0.8);
+}
+
+/* D4 Analysis */
+.d4-analysis {
+  flex: 1; display: flex; flex-direction: column; min-height: 500px;
+}
+.d4-hero-timeline {
+  padding: 16px 20px; background: var(--bg-container);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.d4-analysis-body {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr; overflow-y: auto;
+}
+.d4-phase-detail-panel {
+  padding: 20px; border-right: 1px solid var(--border-subtle);
+}
+.d4-coaching-panel { padding: 20px; }
+
+/* ============================================
+   DIRECTION 5 — STATS DASHBOARD
+   ============================================ */
+.d5-timer-layout {
+  flex: 1; display: grid; grid-template-columns: 200px 1fr 200px;
+  min-height: 500px;
+}
+.d5-left-stats, .d5-right-stats {
+  background: var(--bg-container); padding: 16px;
+  border-right: 1px solid var(--border-subtle);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.d5-right-stats { border-right: none; border-left: 1px solid var(--border-subtle); }
+.d5-center {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; padding: 24px;
+}
+.d5-center .scramble-text {
+  position: absolute; top: 16px; left: 24px; right: 24px; text-align: center;
+}
+.d5-center .timer-display { font-size: 64px; }
+.d5-stat-block { text-align: center; }
+.d5-stat-block .stat-value { margin-bottom: 2px; }
+
+/* D5 Analysis */
+.d5-analysis {
+  flex: 1; padding: 20px; overflow-y: auto;
+}
+.d5-kpi-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  margin-bottom: 20px;
+}
+.d5-kpi {
+  background: var(--bg-container); border-radius: 10px; padding: 16px;
+  text-align: center;
+}
+.d5-kpi .stat-value { font-size: 22px; margin-bottom: 4px; }
+.d5-chart-area {
+  background: var(--bg-container); border-radius: 10px; padding: 20px;
+  margin-bottom: 16px;
+}
+.d5-chart-placeholder {
+  height: 120px; border: 1px dashed var(--border); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-tertiary); font-size: 13px;
+}
+.d5-phase-bars { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.d5-phase-bar-row {
+  display: flex; align-items: center; gap: 12px;
+}
+.d5-phase-bar-row .label {
+  font-size: 13px; color: var(--text-secondary); width: 50px;
+  font-family: var(--font-mono);
+}
+.d5-phase-bar-row .bar-bg {
+  flex: 1; height: 20px; background: var(--bg-elevated); border-radius: 4px;
+  overflow: hidden; position: relative;
+}
+.d5-phase-bar-row .bar-fill {
+  height: 100%; border-radius: 4px; display: flex; align-items: center;
+  padding-left: 8px; font-family: var(--font-mono); font-size: 11px;
+  font-weight: 700; color: rgba(0,0,0,0.7);
+}
+.d5-phase-bar-row .bar-fill.recog {
+  opacity: 0.5; position: absolute; top: 0; left: 0; height: 100%;
+}
+
+/* ============================================
+   DIRECTION 6 — DUAL MODE
+   ============================================ */
+.d6-timer {
+  flex: 1; display: flex; flex-direction: column; min-height: 500px;
+}
+.d6-timer-top {
+  flex: 0 0 35%; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+}
+.d6-timer-top .scramble-text {
+  position: absolute; top: 12px; left: 24px; right: 24px; text-align: center;
+}
+.d6-timer-top .timer-display { font-size: 56px; }
+.d6-timer-top .delta {
+  font-family: var(--font-mono); font-size: 14px; color: var(--grade-great);
+  margin-top: 4px;
+}
+.d6-timer-bottom {
+  flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px;
+  background: var(--bg-container);
+}
+.d6-summary-row {
+  display: flex; gap: 16px; align-items: center;
+}
+
+/* D6 Analysis — split with tabs */
+.d6-analysis {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 500px;
+}
+.d6-3d-panel {
+  background: var(--bg-container); display: flex; align-items: center;
+  justify-content: center; border-right: 1px solid var(--border-subtle);
+  position: relative;
+}
+.d6-3d-placeholder {
+  width: 200px; height: 200px; border: 2px dashed var(--border);
+  border-radius: 12px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+  color: var(--text-tertiary);
+}
+.d6-3d-placeholder .play-btn {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--primary); display: flex; align-items: center;
+  justify-content: center; color: #fff; font-size: 20px; cursor: pointer;
+}
+.d6-tabs-panel { padding: 0; display: flex; flex-direction: column; }
+.d6-tab-bar {
+  display: flex; border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-container);
+}
+.d6-tab {
+  padding: 12px 20px; font-size: 13px; font-weight: 500;
+  color: var(--text-tertiary); cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.d6-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.d6-tab-content { flex: 1; padding: 20px; overflow-y: auto; }
+
+/* ============================================
+   INTRO SECTION
+   ============================================ */
+.intro-section {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 80px 24px;
+}
+.intro-section h1 {
+  font-size: 48px; font-weight: 700; margin-bottom: 8px;
+}
+.intro-section h1 span { color: var(--honey); }
+.intro-section p {
+  font-size: 18px; color: var(--text-secondary); max-width: 600px;
+  margin-bottom: 32px;
+}
+.intro-section .instructions {
+  font-size: 14px; color: var(--text-tertiary);
+  background: var(--bg-container); padding: 16px 24px; border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+/* ============================================
+   DIRECTION 7 — HYBRID (Chosen Direction)
+   ============================================ */
+.d7-timer-layout {
+  flex: 1; display: flex; flex-direction: column; min-height: 500px;
+}
+.d7-timer-main {
+  flex: 1; display: grid; grid-template-columns: 160px 1fr;
+}
+.d7-solve-sidebar {
+  background: var(--bg-container); border-right: 1px solid var(--border-subtle);
+  padding: 10px 0; overflow-y: auto;
+}
+.d7-solve-sidebar-header {
+  padding: 4px 12px 8px; font-size: 11px; font-weight: 600;
+  color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border-subtle); margin-bottom: 4px;
+}
+.d7-solve-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 12px; font-family: var(--font-mono); font-size: 13px;
+  cursor: pointer; transition: background 0.15s;
+}
+.d7-solve-row:hover { background: var(--bg-spotlight); }
+.d7-solve-row.active { background: var(--primary-subtle); }
+.d7-solve-row .num { color: var(--text-tertiary); font-size: 11px; width: 22px; }
+.d7-solve-row .time { color: var(--text-primary); font-weight: 700; }
+.d7-solve-row .diff { font-size: 11px; }
+.d7-solve-row .diff.pos { color: var(--grade-poor); }
+.d7-solve-row .diff.neg { color: var(--grade-great); }
+.d7-center {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; position: relative; padding: 24px;
+}
+.d7-center .scramble-text {
+  position: absolute; top: 16px; left: 24px; right: 24px; text-align: center;
+}
+.d7-center .timer-display { font-size: 64px; }
+/* Bottom stat cards */
+.d7-bottom-bar {
+  display: flex; gap: 0; border-top: 1px solid var(--border-subtle);
+  background: var(--bg-container);
+}
+.d7-bottom-card {
+  flex: 1; padding: 10px 12px; text-align: center;
+  border-right: 1px solid var(--border-subtle);
+}
+.d7-bottom-card:last-child { border-right: none; }
+.d7-bottom-card .stat-label { font-size: 10px; margin-bottom: 2px; }
+.d7-bottom-card .stat-value { font-size: 14px; }
+.d7-debrief-card {
+  background: var(--bg-container); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 20px; max-width: 460px; width: 100%;
+  margin-top: 20px; box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+}
+.d7-debrief-top {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 12px;
+}
+.d7-coach-icon {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: #fff; font-weight: 700; flex-shrink: 0;
+}
+.d7-mini-ring-block { text-align: center; }
+.d7-mini-ring-block .ring-label {
+  font-size: 10px; color: var(--text-tertiary); margin-top: 2px;
+  font-family: var(--font-mono);
+}
+
+/* Override mockup-row for D7 to use full width */
+#d7 .mockup-row {
+  max-width: 1800px; gap: 24px;
+}
+#d7 .section-header { max-width: 1800px; }
+#d7 .mockup-frame { min-height: 580px; }
+.d7-phase-ring {
+  width: 32px; height: 32px; position: relative; flex-shrink: 0;
+}
+.d7-phase-ring svg { transform: rotate(-90deg); }
+.d7-phase-ring .ring-val {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; font-family: var(--font-mono); font-weight: 700;
+  font-size: 9px; color: var(--text-primary);
+}
+
+/* Analysis View */
+.d7-analysis {
+  flex: 1; display: flex; flex-direction: column; min-height: 560px;
+}
+.d7-hero-bar {
+  padding: 16px 20px; background: var(--bg-container);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.d7-hero-row {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
+}
+.d7-phase-boxes {
+  display: flex; gap: 4px; width: 100%;
+}
+.d7-phase-box {
+  flex: 1; background: var(--bg-elevated); border-radius: 8px;
+  padding: 8px 6px; text-align: center; border: 1px solid var(--border-subtle);
+  transition: all 0.2s; cursor: pointer;
+}
+.d7-phase-box:hover { border-color: var(--text-tertiary); }
+.d7-phase-box.flagged { border-color: var(--grade-needs-work); }
+.d7-phase-box .box-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 2px;
+}
+.d7-phase-box .box-time {
+  font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+}
+.d7-phase-box .box-moves {
+  font-size: 10px; color: var(--text-tertiary); margin-top: 1px;
+}
+.d7-phase-box .box-grade {
+  width: 6px; height: 6px; border-radius: 50%; margin: 4px auto 0;
+}
+.d7-analysis-body {
+  flex: 1; display: grid; grid-template-columns: 1fr 320px;
+  overflow: hidden;
+}
+.d7-moments {
+  padding: 16px 20px; overflow-y: auto;
+  border-right: 1px solid var(--border-subtle);
+}
+.d7-coach-panel {
+  padding: 16px; background: var(--bg-container); overflow-y: auto;
+}
+
+/* Key moment rows */
+.d7-moment-ok {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0; color: var(--text-tertiary); font-size: 13px;
+}
+.d7-moment-ok .check {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(34,197,94,0.1); color: var(--grade-great);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; flex-shrink: 0;
+}
+.d7-moment-ok .moment-phase {
+  font-weight: 500; color: var(--text-secondary);
+}
+.d7-moment-ok .moment-meta {
+  font-family: var(--font-mono); font-size: 12px; margin-left: auto;
+}
+
+/* Expanded bad moment */
+.d7-moment-bad {
+  background: var(--bg-elevated); border-radius: 10px;
+  border: 1px solid rgba(249,115,22,0.25); padding: 14px;
+  margin: 6px 0;
+}
+.d7-moment-bad-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.d7-moment-bad-header .flag-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(249,115,22,0.15); color: var(--grade-needs-work);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; flex-shrink: 0;
+}
+.d7-moment-bad-header .moment-phase {
+  font-size: 13px; font-weight: 600; color: var(--grade-needs-work);
+}
+.d7-moment-bad-header .moment-meta {
+  font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); margin-left: auto;
+}
+.d7-moment-moves {
+  display: flex; flex-wrap: wrap; gap: 3px; margin: 8px 0;
+}
+.d7-move {
+  font-family: var(--font-mono); font-size: 13px; padding: 3px 6px;
+  border-radius: 4px; background: var(--bg-spotlight); color: var(--text-tertiary);
+}
+.d7-move.blunder {
+  background: rgba(239,68,68,0.12); color: var(--grade-poor);
+  border: 1px solid rgba(239,68,68,0.3); cursor: pointer;
+  position: relative; font-weight: 700;
+}
+.d7-move.blunder:hover { background: rgba(239,68,68,0.2); }
+.d7-moment-fix {
+  display: flex; align-items: center; gap: 8px; margin-top: 8px;
+  padding: 8px 10px; background: rgba(20,184,166,0.06);
+  border-radius: 6px; border-left: 3px solid var(--primary);
+}
+.d7-moment-fix .fix-label {
+  font-size: 11px; font-weight: 600; color: var(--primary);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.d7-moment-fix .fix-moves {
+  font-family: var(--font-mono); font-size: 13px; color: var(--grade-great);
+}
+.d7-moment-fix .fix-saves {
+  font-size: 11px; color: var(--text-tertiary); margin-left: auto;
+}
+
+/* Brilliant moment */
+.d7-moment-brilliant {
+  background: var(--bg-elevated); border-radius: 10px;
+  border: 1px solid rgba(20,184,166,0.25); padding: 14px;
+  margin: 6px 0;
+}
+.d7-moment-brilliant-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+}
+.d7-moment-brilliant-header .star-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(20,184,166,0.15); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; flex-shrink: 0;
+}
+.d7-moment-brilliant-header .moment-phase {
+  font-size: 13px; font-weight: 600; color: var(--primary);
+}
+.d7-moment-brilliant-header .moment-meta {
+  font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); margin-left: auto;
+}
+
+/* Coach panel */
+.d7-coach-suggestion {
+  background: linear-gradient(135deg, var(--bg-elevated), rgba(20,184,166,0.06));
+  border: 1px solid rgba(20,184,166,0.2); border-radius: 10px;
+  padding: 14px; margin-bottom: 12px;
+}
+.d7-coach-suggestion .coach-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.d7-coach-suggestion .coach-header .icon {
+  width: 24px; height: 24px; border-radius: 50%; background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #fff; font-weight: 700;
+}
+.d7-your-vs-optimal {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;
+}
+.d7-compare-box {
+  background: var(--bg-base); border-radius: 8px; padding: 10px;
+}
+.d7-compare-box .compare-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 4px;
+}
+.d7-compare-box .compare-moves {
+  font-family: var(--font-mono); font-size: 13px; line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+  .mockup-row { grid-template-columns: 1fr; }
+  .d2-timer-layout, .d5-timer-layout, .d7-timer-layout { grid-template-columns: 1fr; }
+  .d2-analysis-layout { grid-template-columns: 1fr; }
+  .d6-analysis { grid-template-columns: 1fr; }
+  .d7-analysis-body { grid-template-columns: 1fr; }
+  .d7-phase-boxes { flex-wrap: wrap; }
+  .d7-phase-box { flex: 0 0 calc(25% - 3px); }
+}
+</style>
+</head>
+<body>
+
+<!-- ==========================================
+     NAV
+     ========================================== -->
+<nav class="top-nav">
+  <span class="brand">BEARCUBE</span>
+  <a href="#intro">Overview</a>
+  <a href="#d1">1. Focus Flow</a>
+  <a href="#d2">2. Command Center</a>
+  <a href="#d3">3. Coach Card</a>
+  <a href="#d4">4. Phase Timeline</a>
+  <a href="#d5">5. Stats Dashboard</a>
+  <a href="#d6">6. Dual Mode</a>
+  <a href="#d7" style="color:var(--honey);font-weight:700">★ 7. Hybrid</a>
+</nav>
+
+<!-- ==========================================
+     INTRO
+     ========================================== -->
+<section class="intro-section" id="intro">
+  <h1>Bear<span>Cube</span></h1>
+  <p>6 design directions for the timer and analysis experience. Each applies the same Honey Bear palette, Space Mono + Grotesk typography, and dark theme — but explores different layouts, information hierarchy, and personality.</p>
+  <div class="instructions">
+    Scroll down to explore each direction. Each shows a <strong>Timer View</strong> (post-solve state) and an <strong>Analysis View</strong> (full solve review) side by side.
+  </div>
+</section>
+
+<!-- ==========================================
+     DIRECTION 1 — FOCUS FLOW
+     ========================================== -->
+<section class="direction-section" id="d1">
+  <div class="section-header">
+    <div class="direction-num">Direction 1</div>
+    <h2>Focus Flow</h2>
+    <div class="personality">Spotify-like. Ultra-minimal chrome. Content speaks. Phone-first single-column analysis.</div>
+  </div>
+  <div class="mockup-row">
+    <!-- Timer View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Timer View — Post-Solve</div>
+      <div class="mockup-frame">
+        <div class="d1-timer">
+          <div class="scramble-text">R2 U' F2 D B2 U2 R2 D' F2 U F' L D2 B R2 F2 D B2 D R</div>
+          <div class="timer-display" style="font-size:72px">12.847</div>
+          <div class="d1-delta" style="font-family:var(--font-mono);font-size:14px;color:var(--grade-great)">-0.71 from avg</div>
+          <div class="d1-stats-row">
+            <div style="text-align:center"><div class="stat-label">Ao5</div><div class="stat-value" style="font-size:14px">13.24</div></div>
+            <div style="text-align:center"><div class="stat-label">Ao12</div><div class="stat-value" style="font-size:14px">13.56</div></div>
+            <div style="text-align:center"><div class="stat-label">Best</div><div class="stat-value" style="font-size:14px;color:var(--honey)">11.93</div></div>
+          </div>
+          <div class="d1-debrief">
+            <div class="phase-bar">
+              <div class="seg seg-cross" style="width:9.3%"></div>
+              <div class="seg seg-f2l" style="width:60.7%"></div>
+              <div class="seg seg-oll" style="width:12.5%"></div>
+              <div class="seg seg-pll" style="width:17.5%"></div>
+            </div>
+            <div class="phase-labels">
+              <span>Cross 1.2s</span><span>F2L 7.8s</span><span>OLL 1.6s</span><span>PLL 2.2s</span>
+            </div>
+            <div style="margin-top:10px" class="coach-text">
+              <strong>F2L pair 3</strong> used 11 moves — optimal is 7. Try <span style="font-family:var(--font-mono);color:var(--primary)">R U R'</span> insertion.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Analysis View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Analysis View — Full Review</div>
+      <div class="mockup-frame">
+        <div class="d1-analysis">
+          <!-- Score -->
+          <div class="d1-score-card">
+            <div class="efficiency-ring">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-elevated)" stroke-width="8"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--grade-good)" stroke-width="8"
+                  stroke-dasharray="264" stroke-dashoffset="68.6" stroke-linecap="round"/>
+              </svg>
+              <div class="value">74%</div>
+            </div>
+            <div>
+              <div style="font-size:18px;font-weight:600;margin-bottom:4px">Solve Efficiency</div>
+              <div style="font-size:13px;color:var(--text-secondary)">32 moves · 5.1 TPS · 12.847s</div>
+              <div style="margin-top:6px;display:flex;gap:6px">
+                <span class="badge badge-great">Cross ✓</span>
+                <span class="badge badge-needs-work">F2L P3 ↓</span>
+                <span class="badge badge-good">OLL ✓</span>
+              </div>
+            </div>
+          </div>
+          <!-- Phases -->
+          <div class="d1-phase-card">
+            <h4 style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:12px">PHASE BREAKDOWN</h4>
+            <div class="phase-bar" style="height:12px;margin-bottom:12px">
+              <div class="seg seg-cross" style="width:9.3%"></div>
+              <div class="seg seg-f2l" style="width:60.7%"></div>
+              <div class="seg seg-oll" style="width:12.5%"></div>
+              <div class="seg seg-pll" style="width:17.5%"></div>
+            </div>
+            <div class="d1-phase-detail">
+              <div class="d1-phase-row"><span class="name">Cross</span><span class="time" style="color:var(--grade-great)">1.2s</span></div>
+              <div class="d1-phase-row"><span class="name">F2L P1</span><span class="time">2.1s</span></div>
+              <div class="d1-phase-row"><span class="name">F2L P2</span><span class="time">1.8s</span></div>
+              <div class="d1-phase-row"><span class="name" style="color:var(--grade-needs-work)">F2L P3</span><span class="time" style="color:var(--grade-needs-work)">2.4s</span></div>
+              <div class="d1-phase-row"><span class="name">F2L P4</span><span class="time">1.5s</span></div>
+              <div class="d1-phase-row"><span class="name">OLL</span><span class="time">1.6s</span></div>
+              <div class="d1-phase-row"><span class="name">PLL</span><span class="time">2.2s</span></div>
+            </div>
+          </div>
+          <!-- Coach -->
+          <div class="d1-coach-card">
+            <div style="font-size:13px;font-weight:600;color:var(--primary);margin-bottom:8px">AI COACH</div>
+            <div class="coach-text">
+              <strong>Clean cross at 5 moves.</strong> F2L pair 3 used 11 moves — optimal is 7. You're inserting with <span style="font-family:var(--font-mono)">R U2 R' F</span> rotation — try <span style="font-family:var(--font-mono);color:var(--primary)">R U R'</span> instead to eliminate the rotation.
+            </div>
+            <div style="margin-top:12px">
+              <button class="btn-primary">Practice This Drill</button>
+            </div>
+          </div>
+          <!-- Moves -->
+          <div class="d1-moves-card">
+            <h4 style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:12px">MOVE QUALITY</h4>
+            <div class="move-dots">
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-needs-work)"></div>
+              <div class="move-dot" style="background:var(--grade-needs-work)"></div>
+              <div class="move-dot" style="background:var(--grade-poor)"></div>
+              <div class="move-dot" style="background:var(--grade-needs-work)"></div>
+              <div class="move-dot" style="background:var(--grade-needs-work)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-good)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+              <div class="move-dot" style="background:var(--grade-great)"></div>
+            </div>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-tertiary)">32 moves · each dot = 1 move · colored by efficiency</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     DIRECTION 2 — COMMAND CENTER
+     ========================================== -->
+<section class="direction-section" id="d2">
+  <div class="section-header">
+    <div class="direction-num">Direction 2</div>
+    <h2>Command Center</h2>
+    <div class="personality">Chess.com meets Linear. Persistent solve list sidebar. Three-column analysis. Data-forward, professional.</div>
+  </div>
+  <div class="mockup-row">
+    <!-- Timer View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Timer View — With Session Sidebar</div>
+      <div class="mockup-frame">
+        <div class="d2-timer-layout">
+          <div class="d2-sidebar">
+            <div class="d2-sidebar-header">Session — 15 solves</div>
+            <div class="d2-solve-row active"><span class="num">15</span><span class="time">12.847</span><span class="diff neg">-0.71</span></div>
+            <div class="d2-solve-row"><span class="num">14</span><span class="time">13.214</span><span class="diff neg">-0.35</span></div>
+            <div class="d2-solve-row"><span class="num">13</span><span class="time">13.567</span><span class="diff pos">+0.01</span></div>
+            <div class="d2-solve-row"><span class="num">12</span><span class="time">14.023</span><span class="diff pos">+0.46</span></div>
+            <div class="d2-solve-row"><span class="num">11</span><span class="time">12.901</span><span class="diff neg">-0.66</span></div>
+            <div class="d2-solve-row"><span class="num">10</span><span class="time">13.445</span><span class="diff neg">-0.11</span></div>
+            <div class="d2-solve-row"><span class="num">9</span><span class="time">13.876</span><span class="diff pos">+0.32</span></div>
+            <div class="d2-solve-row"><span class="num">8</span><span class="time">14.234</span><span class="diff pos">+0.67</span></div>
+            <div class="d2-solve-row"><span class="num">7</span><span class="time">13.012</span><span class="diff neg">-0.55</span></div>
+            <div class="d2-solve-row"><span class="num">6</span><span class="time" style="color:var(--honey)">11.930</span><span class="diff neg" style="color:var(--honey)">PB</span></div>
+          </div>
+          <div class="d2-main">
+            <div class="scramble-text">R2 U' F2 D B2 U2 R2 D' F2 U F' L D2 B R2 F2 D B2 D R</div>
+            <div class="timer-display">12.847</div>
+            <div style="font-family:var(--font-mono);font-size:13px;color:var(--text-secondary);margin-bottom:24px">Ao5: 13.24 · Ao12: 13.56</div>
+            <div class="d2-debrief">
+              <div class="phase-bar" style="height:10px;margin-bottom:8px">
+                <div class="seg seg-cross" style="width:9.3%"></div>
+                <div class="seg seg-f2l" style="width:60.7%"></div>
+                <div class="seg seg-oll" style="width:12.5%"></div>
+                <div class="seg seg-pll" style="width:17.5%"></div>
+              </div>
+              <div class="coach-text" style="font-size:13px">
+                <strong>F2L pair 3:</strong> 11 moves (7 optimal). Try <span style="font-family:var(--font-mono);color:var(--primary)">R U R'</span> insertion.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Analysis View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Analysis View — Three-Column</div>
+      <div class="mockup-frame">
+        <div class="d2-analysis-layout">
+          <div class="d2-sidebar">
+            <div class="d2-sidebar-header">Session</div>
+            <div class="d2-solve-row active"><span class="num">15</span><span class="time">12.847</span></div>
+            <div class="d2-solve-row"><span class="num">14</span><span class="time">13.214</span></div>
+            <div class="d2-solve-row"><span class="num">13</span><span class="time">13.567</span></div>
+            <div class="d2-solve-row"><span class="num">12</span><span class="time">14.023</span></div>
+            <div class="d2-solve-row"><span class="num">11</span><span class="time">12.901</span></div>
+            <div class="d2-solve-row"><span class="num">10</span><span class="time">13.445</span></div>
+          </div>
+          <div class="d2-analysis-main">
+            <div class="d2-timeline">
+              <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px">PHASE TIMELINE — click to explore</div>
+              <div class="d2-timeline-bar">
+                <div class="seg" style="width:9.3%;background:var(--grade-great)"><span class="seg-time" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:rgba(0,0,0,0.7)">1.2</span></div>
+                <div class="seg" style="width:16.3%;background:var(--grade-good)"><span class="seg-time" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:rgba(0,0,0,0.7)">2.1</span></div>
+                <div class="seg" style="width:14%;background:var(--grade-good)"><span class="seg-time" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:rgba(0,0,0,0.7)">1.8</span></div>
+                <div class="seg" style="width:18.7%;background:var(--grade-needs-work)"><span class="seg-time" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:rgba(0,0,0,0.7)">2.4</span></div>
+                <div class="seg" style="width:11.7%;background:var(--grade-great)"><span class="seg-time" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:rgba(0,0,0,0.7)">1.5</span></div>
+                <div class="seg" style="width:12.5%;background:var(--grade-good)"><span class="seg-time" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:rgba(0,0,0,0.7)">1.6</span></div>
+                <div class="seg" style="width:17.5%;background:var(--grade-good)"><span class="seg-time" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:rgba(0,0,0,0.7)">2.2</span></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-tertiary);font-family:var(--font-mono)">
+                <span>Cross</span><span>F2L P1</span><span>P2</span><span>P3</span><span>P4</span><span>OLL</span><span>PLL</span>
+              </div>
+            </div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px">MOVE SEQUENCE</div>
+            <div class="d2-move-list">
+              <span class="d2-move great">R</span><span class="d2-move great">U</span><span class="d2-move great">R'</span>
+              <span class="d2-move great">D</span><span class="d2-move great">F2</span>
+              <span style="color:var(--text-tertiary);font-size:11px;padding:3px 4px">|</span>
+              <span class="d2-move good">U</span><span class="d2-move good">R</span><span class="d2-move great">U'</span>
+              <span class="d2-move great">R'</span><span class="d2-move good">U</span><span class="d2-move good">R</span>
+              <span class="d2-move great">U'</span><span class="d2-move great">R'</span>
+              <span style="color:var(--text-tertiary);font-size:11px;padding:3px 4px">|</span>
+              <span class="d2-move needs-work">R</span><span class="d2-move needs-work">U2</span><span class="d2-move poor">R'</span>
+              <span class="d2-move needs-work">F</span><span class="d2-move needs-work">R</span><span class="d2-move good">U'</span>
+              <span class="d2-move good">R'</span><span class="d2-move good">U'</span><span class="d2-move good">R</span>
+              <span class="d2-move good">U</span><span class="d2-move great">R'</span>
+            </div>
+            <div style="margin-top:6px;font-size:11px;color:var(--text-tertiary)">Vertical bars separate CFOP phases · colored by efficiency</div>
+          </div>
+          <div class="d2-analysis-right">
+            <div style="font-size:13px;font-weight:600;color:var(--primary);margin-bottom:12px">AI COACH</div>
+            <div class="coach-text" style="font-size:13px;margin-bottom:16px">
+              <strong>Clean cross at 5 moves.</strong> F2L pair 3 used 11 moves — optimal is 7. You're inserting with <span style="font-family:var(--font-mono)">R U2 R' F</span> rotation.
+            </div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin:16px 0 8px">RECOMMENDED</div>
+            <div style="background:var(--bg-elevated);padding:12px;border-radius:8px;margin-bottom:12px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">F2L Case #31</div>
+              <div style="font-family:var(--font-mono);font-size:13px;color:var(--primary);margin-bottom:8px">R U R' U' R U R'</div>
+              <button class="btn-primary" style="width:100%;font-size:12px;padding:6px">Practice Drill</button>
+            </div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin:16px 0 8px">EFFICIENCY</div>
+            <div style="text-align:center">
+              <div class="efficiency-ring" style="margin:0 auto">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-elevated)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="var(--grade-good)" stroke-width="8"
+                    stroke-dasharray="264" stroke-dashoffset="68.6" stroke-linecap="round"/>
+                </svg>
+                <div class="value">74%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     DIRECTION 3 — COACH CARD
+     ========================================== -->
+<section class="direction-section" id="d3">
+  <div class="section-header">
+    <div class="direction-num">Direction 3</div>
+    <h2>Coach Card</h2>
+    <div class="personality">Duolingo-like coaching feel. The AI coach "speaks" to you through a floating card. Analysis uses a responsive card grid.</div>
+  </div>
+  <div class="mockup-row">
+    <!-- Timer View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Timer View — Floating Coach Card</div>
+      <div class="mockup-frame">
+        <div class="d3-timer">
+          <div class="scramble-text">R2 U' F2 D B2 U2 R2 D' F2 U F' L D2 B R2 F2 D B2 D R</div>
+          <div class="timer-display" style="font-size:72px">12.847</div>
+          <div class="d3-coach-float">
+            <div class="coach-icon">B</div>
+            <div class="coach-text">
+              <strong>Nice solve!</strong> Your cross was clean at 5 moves. But <strong style="color:var(--grade-needs-work)">F2L pair 3</strong> used 11 moves — optimal is 7. Try <span style="font-family:var(--font-mono);color:var(--primary)">R U R'</span> instead of the rotation.
+            </div>
+            <div class="phase-bar" style="height:6px;margin-bottom:8px">
+              <div class="seg seg-cross" style="width:9.3%"></div>
+              <div class="seg seg-f2l" style="width:60.7%"></div>
+              <div class="seg seg-oll" style="width:12.5%"></div>
+              <div class="seg seg-pll" style="width:17.5%"></div>
+            </div>
+            <div class="d3-expand">View Full Analysis →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Analysis View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Analysis View — Card Grid</div>
+      <div class="mockup-frame">
+        <div class="d3-analysis">
+          <div class="d3-card-grid">
+            <!-- Score Card -->
+            <div class="d3-card">
+              <h4>Efficiency Score</h4>
+              <div style="display:flex;align-items:center;gap:16px">
+                <div class="efficiency-ring" style="width:80px;height:80px">
+                  <svg width="80" height="80" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-elevated)" stroke-width="8"/>
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--grade-good)" stroke-width="8"
+                      stroke-dasharray="264" stroke-dashoffset="68.6" stroke-linecap="round"/>
+                  </svg>
+                  <div class="value" style="font-size:20px">74%</div>
+                </div>
+                <div>
+                  <div style="font-family:var(--font-mono);font-size:24px;font-weight:700">12.847</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">32 moves · 5.1 TPS</div>
+                </div>
+              </div>
+            </div>
+            <!-- Phase Card -->
+            <div class="d3-card">
+              <h4>Phase Breakdown</h4>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Cross</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-great)">1.2s · 5mv</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">F2L</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-needs-work)">7.8s · 19mv</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">OLL</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-good)">1.6s · 9mv</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">PLL</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-good)">2.2s · 14mv</span></div>
+              </div>
+            </div>
+            <!-- Coach Card -->
+            <div class="d3-card coach-card full-width">
+              <h4 style="color:var(--primary)">AI Coach</h4>
+              <div class="coach-text">
+                <strong>Clean cross at 5 moves.</strong> F2L pair 3 used 11 moves — optimal is 7. You're inserting with <span style="font-family:var(--font-mono)">R U2 R' F</span> rotation — try <span style="font-family:var(--font-mono);color:var(--primary)">R U R'</span> instead to eliminate the rotation. Your OLL recognition was fast at 0.3s — nice improvement from last session.
+              </div>
+              <div style="margin-top:12px;display:flex;gap:8px">
+                <button class="btn-primary" style="font-size:13px">Practice F2L #31</button>
+                <button class="btn-ghost">View Ghost Solve</button>
+              </div>
+            </div>
+            <!-- Replay Card -->
+            <div class="d3-card">
+              <h4>Ghost Solve</h4>
+              <div style="height:120px;border:1px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);font-size:13px">
+                <div style="text-align:center">
+                  <div style="font-size:32px;margin-bottom:4px">▶</div>
+                  3D Replay
+                </div>
+              </div>
+            </div>
+            <!-- Drill Card -->
+            <div class="d3-card">
+              <h4>Recommended Drill</h4>
+              <div style="font-size:14px;font-weight:500;margin-bottom:4px">F2L Case #31</div>
+              <div style="font-family:var(--font-mono);font-size:14px;color:var(--primary);margin-bottom:8px">R U R' U' R U R'</div>
+              <div style="font-size:12px;color:var(--text-secondary)">This case appeared 3x this session. Average: 11 moves (optimal: 7)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     DIRECTION 4 — PHASE TIMELINE
+     ========================================== -->
+<section class="direction-section" id="d4">
+  <div class="section-header">
+    <div class="direction-num">Direction 4</div>
+    <h2>Phase Timeline</h2>
+    <div class="personality">Chess.com-inspired. The phase timeline IS the navigation. Click any segment to drill into that phase. Evaluation bar for cubing.</div>
+  </div>
+  <div class="mockup-row">
+    <!-- Timer View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Timer View — Timeline Below Timer</div>
+      <div class="mockup-frame">
+        <div class="d4-timer">
+          <div class="scramble-text">R2 U' F2 D B2 U2 R2 D' F2 U F' L D2 B R2 F2 D B2 D R</div>
+          <div class="timer-display" style="font-size:72px">12.847</div>
+          <div class="d4-timeline-hero">
+            <div class="d4-timeline-segments">
+              <div class="seg" style="width:9.3%;background:var(--grade-great)"><span class="seg-label">Cross</span><span class="seg-time">1.2</span></div>
+              <div class="seg" style="width:16.3%;background:var(--grade-good)"><span class="seg-label">P1</span><span class="seg-time">2.1</span></div>
+              <div class="seg" style="width:14%;background:var(--grade-good)"><span class="seg-label">P2</span><span class="seg-time">1.8</span></div>
+              <div class="seg" style="width:18.7%;background:var(--grade-needs-work)"><span class="seg-label">P3</span><span class="seg-time">2.4</span></div>
+              <div class="seg" style="width:11.7%;background:var(--grade-great)"><span class="seg-label">P4</span><span class="seg-time">1.5</span></div>
+              <div class="seg" style="width:12.5%;background:var(--grade-good)"><span class="seg-label">OLL</span><span class="seg-time">1.6</span></div>
+              <div class="seg" style="width:17.5%;background:var(--grade-good)"><span class="seg-label">PLL</span><span class="seg-time">2.2</span></div>
+            </div>
+            <div style="text-align:center;margin-top:8px" class="coach-text" style="font-size:13px">
+              <strong>F2L pair 3</strong> used 11 moves (7 optimal) — tap to see details
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Analysis View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Analysis View — Timeline as Navigation</div>
+      <div class="mockup-frame">
+        <div class="d4-analysis">
+          <!-- Hero timeline -->
+          <div class="d4-hero-timeline">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <div style="font-family:var(--font-mono);font-size:20px;font-weight:700">12.847</div>
+              <div style="display:flex;gap:6px">
+                <span class="badge badge-good">74%</span>
+                <span class="badge badge-great">Cross ✓</span>
+                <span class="badge badge-needs-work">F2L P3 ↓</span>
+              </div>
+            </div>
+            <div class="d4-timeline-segments" style="height:36px">
+              <div class="seg" style="width:9.3%;background:var(--grade-great)"><span class="seg-time">1.2</span></div>
+              <div class="seg" style="width:16.3%;background:var(--grade-good)"><span class="seg-time">2.1</span></div>
+              <div class="seg" style="width:14%;background:var(--grade-good)"><span class="seg-time">1.8</span></div>
+              <div class="seg" style="width:18.7%;background:var(--grade-needs-work);outline:2px solid var(--text-primary);outline-offset:-2px"><span class="seg-time">2.4</span></div>
+              <div class="seg" style="width:11.7%;background:var(--grade-great)"><span class="seg-time">1.5</span></div>
+              <div class="seg" style="width:12.5%;background:var(--grade-good)"><span class="seg-time">1.6</span></div>
+              <div class="seg" style="width:17.5%;background:var(--grade-good)"><span class="seg-time">2.2</span></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-tertiary);font-family:var(--font-mono);margin-top:4px">
+              <span>Cross</span><span>F2L P1</span><span>P2</span><span style="color:var(--text-primary);font-weight:700">P3 ◄</span><span>P4</span><span>OLL</span><span>PLL</span>
+            </div>
+          </div>
+          <!-- Split content -->
+          <div class="d4-analysis-body">
+            <div class="d4-phase-detail-panel">
+              <div style="font-size:16px;font-weight:600;margin-bottom:4px">F2L Pair 3 <span style="color:var(--grade-needs-work);font-size:13px">Needs Work</span></div>
+              <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">2.4s · 11 moves · 4.6 TPS</div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px">YOUR MOVES</div>
+              <div style="font-family:var(--font-mono);font-size:14px;color:var(--grade-needs-work);margin-bottom:16px;line-height:1.8">R U2 R' F R U' R' U' R U R'</div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px">OPTIMAL</div>
+              <div style="font-family:var(--font-mono);font-size:14px;color:var(--grade-great);margin-bottom:16px;line-height:1.8">R U R' U' R U R'</div>
+              <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px"><strong>Difference:</strong> +4 moves, +0.8s</div>
+              <div style="font-size:13px;color:var(--text-secondary)"><strong>Issue:</strong> Unnecessary rotation (F)</div>
+            </div>
+            <div class="d4-coaching-panel">
+              <div style="font-size:13px;font-weight:600;color:var(--primary);margin-bottom:12px">AI COACH — F2L PAIR 3</div>
+              <div class="coach-text" style="font-size:13px;margin-bottom:16px">
+                You're using a rotation-heavy insertion for this case. The <span style="font-family:var(--font-mono)">F</span> move forces a cube rotation that costs ~0.4s. The optimal insertion eliminates this entirely.
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px">SESSION PATTERN</div>
+              <div class="coach-text" style="font-size:13px;margin-bottom:16px">
+                This same case appeared <strong>3 times</strong> this session. You averaged <strong>11.3 moves</strong> each time. This is your highest-impact training target right now.
+              </div>
+              <button class="btn-primary" style="width:100%">Practice F2L Case #31</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     DIRECTION 5 — STATS DASHBOARD
+     ========================================== -->
+<section class="direction-section" id="d5">
+  <div class="section-header">
+    <div class="direction-num">Direction 5</div>
+    <h2>Stats Dashboard</h2>
+    <div class="personality">Strava / Garmin. Data-rich, quantified-self. Flanking stat panels on timer. Full analytics dashboard for analysis.</div>
+  </div>
+  <div class="mockup-row">
+    <!-- Timer View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Timer View — Flanking Stats</div>
+      <div class="mockup-frame">
+        <div class="d5-timer-layout">
+          <div class="d5-left-stats">
+            <div class="d5-stat-block"><div class="stat-label">Current Ao5</div><div class="stat-value" style="font-size:16px">13.24</div>
+              <div class="sparkline"><div class="bar" style="height:60%"></div><div class="bar" style="height:80%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:90%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:75%"></div></div>
+            </div>
+            <div class="d5-stat-block"><div class="stat-label">Current Ao12</div><div class="stat-value" style="font-size:16px">13.56</div>
+              <div class="sparkline"><div class="bar" style="height:70%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:80%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:75%"></div><div class="bar" style="height:85%"></div><div class="bar" style="height:50%"></div></div>
+            </div>
+            <div class="d5-stat-block"><div class="stat-label">Session Best</div><div class="stat-value" style="font-size:16px;color:var(--honey)">11.93</div></div>
+            <div class="d5-stat-block"><div class="stat-label">Session Mean</div><div class="stat-value" style="font-size:16px">13.56</div></div>
+            <div class="d5-stat-block"><div class="stat-label">Solves</div><div class="stat-value" style="font-size:16px">15</div></div>
+          </div>
+          <div class="d5-center">
+            <div class="scramble-text">R2 U' F2 D B2 U2 R2 D' F2 U</div>
+            <div class="timer-display">12.847</div>
+            <div style="font-family:var(--font-mono);font-size:14px;color:var(--grade-great);margin-top:8px">-0.71 from avg</div>
+          </div>
+          <div class="d5-right-stats">
+            <div style="font-size:12px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.08em">Last Solve</div>
+            <div class="d5-stat-block"><div class="stat-label">Efficiency</div><div class="stat-value" style="font-size:16px;color:var(--grade-good)">74%</div></div>
+            <div class="d5-stat-block"><div class="stat-label">Moves</div><div class="stat-value" style="font-size:16px">32</div></div>
+            <div class="d5-stat-block"><div class="stat-label">TPS</div><div class="stat-value" style="font-size:16px">5.1</div></div>
+            <div style="margin-top:auto">
+              <div class="phase-bar" style="height:6px;margin-bottom:4px">
+                <div class="seg seg-cross" style="width:9.3%"></div>
+                <div class="seg seg-f2l" style="width:60.7%"></div>
+                <div class="seg seg-oll" style="width:12.5%"></div>
+                <div class="seg seg-pll" style="width:17.5%"></div>
+              </div>
+              <div style="font-size:10px;color:var(--text-tertiary);display:flex;justify-content:space-between"><span>Cr</span><span>F2L</span><span>OL</span><span>PL</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Analysis View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Analysis View — Full Dashboard</div>
+      <div class="mockup-frame">
+        <div class="d5-analysis">
+          <div class="d5-kpi-row">
+            <div class="d5-kpi">
+              <div class="stat-value" style="color:var(--grade-good)">74%</div>
+              <div class="stat-label">Efficiency</div>
+            </div>
+            <div class="d5-kpi">
+              <div class="stat-value">5.1</div>
+              <div class="stat-label">TPS</div>
+            </div>
+            <div class="d5-kpi">
+              <div class="stat-value">32</div>
+              <div class="stat-label">Moves</div>
+            </div>
+            <div class="d5-kpi">
+              <div class="stat-value">0.3s</div>
+              <div class="stat-label">OLL Recog</div>
+            </div>
+          </div>
+          <div class="d5-chart-area">
+            <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:12px">PHASE BREAKDOWN — Recognition vs Execution</div>
+            <div class="d5-phase-bars">
+              <div class="d5-phase-bar-row">
+                <span class="label">Cross</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:15%;background:var(--grade-great)">1.2s</div>
+                </div>
+              </div>
+              <div class="d5-phase-bar-row">
+                <span class="label">F2L-1</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:28%;background:var(--grade-good)">2.1s</div>
+                </div>
+              </div>
+              <div class="d5-phase-bar-row">
+                <span class="label">F2L-2</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:24%;background:var(--grade-good)">1.8s</div>
+                </div>
+              </div>
+              <div class="d5-phase-bar-row">
+                <span class="label" style="color:var(--grade-needs-work)">F2L-3</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:32%;background:var(--grade-needs-work)">2.4s</div>
+                </div>
+              </div>
+              <div class="d5-phase-bar-row">
+                <span class="label">F2L-4</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:20%;background:var(--grade-great)">1.5s</div>
+                </div>
+              </div>
+              <div class="d5-phase-bar-row">
+                <span class="label">OLL</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:21%;background:var(--grade-good)">1.6s</div>
+                </div>
+              </div>
+              <div class="d5-phase-bar-row">
+                <span class="label">PLL</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:29%;background:var(--grade-good)">2.2s</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d5-chart-area">
+            <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);margin-bottom:12px">SESSION TREND</div>
+            <div class="d5-chart-placeholder">Session solve time trend chart (Ao5 / Ao12 lines)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     DIRECTION 6 — DUAL MODE
+     ========================================== -->
+<section class="direction-section" id="d6">
+  <div class="section-header">
+    <div class="direction-num">Direction 6</div>
+    <h2>Dual Mode</h2>
+    <div class="personality">Clear mode separation. Post-solve splits the screen. Analysis features tabbed interface with 3D replay as hero element.</div>
+  </div>
+  <div class="mockup-row">
+    <!-- Timer View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Timer View — Split After Solve</div>
+      <div class="mockup-frame">
+        <div class="d6-timer">
+          <div class="d6-timer-top">
+            <div class="scramble-text">R2 U' F2 D B2 U2 R2 D' F2 U F' L D2 B R2 F2 D B2 D R</div>
+            <div class="timer-display">12.847</div>
+            <div class="delta">-0.71 from avg</div>
+          </div>
+          <div class="d6-timer-bottom">
+            <div class="d6-summary-row">
+              <div class="efficiency-ring" style="width:64px;height:64px">
+                <svg width="64" height="64" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-elevated)" stroke-width="10"/>
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="var(--grade-good)" stroke-width="10"
+                    stroke-dasharray="264" stroke-dashoffset="68.6" stroke-linecap="round"/>
+                </svg>
+                <div class="value" style="font-size:16px">74%</div>
+              </div>
+              <div style="flex:1">
+                <div class="phase-bar" style="height:10px;margin-bottom:6px">
+                  <div class="seg seg-cross" style="width:9.3%"></div>
+                  <div class="seg seg-f2l" style="width:60.7%"></div>
+                  <div class="seg seg-oll" style="width:12.5%"></div>
+                  <div class="seg seg-pll" style="width:17.5%"></div>
+                </div>
+                <div class="phase-labels" style="font-size:10px">
+                  <span>Cross 1.2s</span><span>F2L 7.8s</span><span>OLL 1.6s</span><span>PLL 2.2s</span>
+                </div>
+              </div>
+            </div>
+            <div class="coach-text" style="font-size:13px;border-left:3px solid var(--primary);padding-left:12px">
+              <strong>F2L pair 3</strong> used 11 moves — optimal is 7. Try <span style="font-family:var(--font-mono);color:var(--primary)">R U R'</span> insertion.
+            </div>
+            <div style="display:flex;gap:8px;margin-top:auto">
+              <button class="btn-primary">View Full Analysis</button>
+              <button class="btn-ghost">Next Solve</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Analysis View -->
+    <div class="mockup-col">
+      <div class="mockup-label">Analysis View — Tabs + 3D Replay</div>
+      <div class="mockup-frame">
+        <div class="d6-analysis">
+          <div class="d6-3d-panel">
+            <div class="d6-3d-placeholder">
+              <div class="play-btn">▶</div>
+              <div style="font-size:13px">Ghost Solve Replay</div>
+              <div style="font-size:11px">Your solve vs. Optimal</div>
+            </div>
+          </div>
+          <div class="d6-tabs-panel">
+            <div class="d6-tab-bar">
+              <div class="d6-tab active">Overview</div>
+              <div class="d6-tab">Phases</div>
+              <div class="d6-tab">Moves</div>
+              <div class="d6-tab">Coach</div>
+            </div>
+            <div class="d6-tab-content">
+              <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+                <div class="efficiency-ring" style="width:80px;height:80px">
+                  <svg width="80" height="80" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-elevated)" stroke-width="8"/>
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--grade-good)" stroke-width="8"
+                      stroke-dasharray="264" stroke-dashoffset="68.6" stroke-linecap="round"/>
+                  </svg>
+                  <div class="value" style="font-size:20px">74%</div>
+                </div>
+                <div>
+                  <div style="font-family:var(--font-mono);font-size:24px;font-weight:700;margin-bottom:2px">12.847</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">32 moves · 5.1 TPS</div>
+                  <div style="font-size:12px;color:var(--grade-great)">-0.71 from session avg</div>
+                </div>
+              </div>
+              <div class="phase-bar" style="height:12px;margin-bottom:12px">
+                <div class="seg seg-cross" style="width:9.3%"></div>
+                <div class="seg seg-f2l" style="width:60.7%"></div>
+                <div class="seg seg-oll" style="width:12.5%"></div>
+                <div class="seg seg-pll" style="width:17.5%"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 8px;background:var(--bg-container);border-radius:6px"><span style="color:var(--text-secondary)">Cross</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-great)">1.2s · 5mv</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 8px;background:var(--bg-container);border-radius:6px"><span style="color:var(--text-secondary)">F2L</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-needs-work)">7.8s · 19mv</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 8px;background:var(--bg-container);border-radius:6px"><span style="color:var(--text-secondary)">OLL</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-good)">1.6s · 9mv</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 8px;background:var(--bg-container);border-radius:6px"><span style="color:var(--text-secondary)">PLL</span><span style="font-family:var(--font-mono);font-weight:700;color:var(--grade-good)">2.2s · 14mv</span></div>
+              </div>
+              <div style="margin-top:16px;border-left:3px solid var(--primary);padding-left:12px" class="coach-text" style="font-size:13px">
+                <strong>Key insight:</strong> F2L pair 3 is your biggest opportunity. 11→7 moves saves ~0.8s per solve.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     DIRECTION 7 — HYBRID (Chosen Direction)
+     ========================================== -->
+<section class="direction-section" id="d7" style="border-left: 3px solid var(--honey);">
+  <div class="section-header">
+    <div class="direction-num" style="color:var(--honey)">★ Direction 7 — Chosen Hybrid</div>
+    <h2>The BearCube Way</h2>
+    <div class="personality">Best of all directions. Solve list sidebar + Coach Card debrief on timer + session stat cards at bottom. Analysis expands right side with CFOP phase boxes, chess.com-style key moments walkthrough, two-level color grading, and clickable blunders with AI coach panel.</div>
+  </div>
+  <div class="mockup-row">
+    <!-- ==========================================
+         TIMER VIEW
+         ========================================== -->
+    <div class="mockup-col">
+      <div class="mockup-label">Timer View — Solve List + Coach Debrief + Stat Cards</div>
+      <div class="mockup-frame">
+        <div class="d7-timer-layout">
+          <!-- Top: Solve sidebar + Timer center -->
+          <div class="d7-timer-main">
+            <!-- Left: Solve List (D2 Command Center inspired) -->
+            <div class="d7-solve-sidebar">
+              <div class="d7-solve-sidebar-header">Session — 15 solves</div>
+              <div class="d7-solve-row active"><span class="num">15</span><span class="time">12.847</span><span class="diff neg">-0.71</span></div>
+              <div class="d7-solve-row"><span class="num">14</span><span class="time">13.214</span><span class="diff neg">-0.35</span></div>
+              <div class="d7-solve-row"><span class="num">13</span><span class="time">13.567</span><span class="diff pos">+0.01</span></div>
+              <div class="d7-solve-row"><span class="num">12</span><span class="time">14.023</span><span class="diff pos">+0.46</span></div>
+              <div class="d7-solve-row"><span class="num">11</span><span class="time">12.901</span><span class="diff neg">-0.66</span></div>
+              <div class="d7-solve-row"><span class="num">10</span><span class="time">13.445</span><span class="diff neg">-0.11</span></div>
+              <div class="d7-solve-row"><span class="num">9</span><span class="time">13.876</span><span class="diff pos">+0.32</span></div>
+              <div class="d7-solve-row"><span class="num">8</span><span class="time">14.234</span><span class="diff pos">+0.67</span></div>
+              <div class="d7-solve-row"><span class="num">7</span><span class="time">13.012</span><span class="diff neg">-0.55</span></div>
+              <div class="d7-solve-row"><span class="num">6</span><span class="time" style="color:var(--honey)">11.930</span><span class="diff neg" style="color:var(--honey)">PB</span></div>
+            </div>
+
+            <!-- Center: Timer + Coach Debrief -->
+            <div class="d7-center">
+              <div class="scramble-text">R2 U' F2 D B2 U2 R2 D' F2 U F' L D2 B R2 F2 D B2 D R</div>
+              <div class="timer-display">12.847</div>
+              <div style="font-family:var(--font-mono);font-size:14px;color:var(--grade-great);margin-top:6px;margin-bottom:8px">-0.71 from avg</div>
+
+              <!-- Quick Solve Review Card (click to expand full analysis) -->
+              <div class="d7-debrief-card" style="cursor:pointer">
+                <!-- Phase bar with times -->
+                <div class="phase-bar" style="height:10px;margin-bottom:6px;border-radius:5px">
+                  <div class="seg seg-cross" style="width:9.3%"></div>
+                  <div class="seg seg-f2l" style="width:60.7%"></div>
+                  <div class="seg seg-oll" style="width:12.5%"></div>
+                  <div class="seg seg-pll" style="width:17.5%"></div>
+                </div>
+                <div class="phase-labels" style="font-size:10px;margin-bottom:10px">
+                  <span>Cross 1.2s</span><span>F2L 7.8s</span><span>OLL 1.6s</span><span>PLL 2.2s</span>
+                </div>
+                <!-- Key findings -->
+                <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:10px">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                    <span style="color:var(--grade-needs-work);font-weight:600;width:14px;text-align:center">⚠</span>
+                    <span style="color:var(--text-secondary)"><strong style="color:var(--grade-needs-work)">F2L P3</strong> — 11 moves (7 optimal) · wrong algorithm</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                    <span style="color:var(--primary);font-weight:600;width:14px;text-align:center">★</span>
+                    <span style="color:var(--text-secondary)"><strong style="color:var(--primary)">F2L P4</strong> — clean 3-move insert, near optimal</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                    <span style="color:var(--grade-great);font-weight:600;width:14px;text-align:center">↑</span>
+                    <span style="color:var(--text-secondary)"><strong style="color:var(--grade-great)">OLL recog</strong> — 0.3s, improved from last session</span>
+                  </div>
+                </div>
+                <!-- Expand prompt -->
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--primary);padding-top:6px;border-top:1px solid var(--border-subtle)">
+                  Tap to view full analysis ↓
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Session Stat Cards -->
+          <div class="d7-bottom-bar">
+            <div class="d7-bottom-card">
+              <div class="stat-label">Ao5</div>
+              <div class="stat-value">13.24</div>
+              <div class="sparkline" style="justify-content:center;margin-top:4px"><div class="bar" style="height:60%"></div><div class="bar" style="height:80%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:90%"></div></div>
+            </div>
+            <div class="d7-bottom-card">
+              <div class="stat-label">Ao12</div>
+              <div class="stat-value">13.56</div>
+              <div class="sparkline" style="justify-content:center;margin-top:4px"><div class="bar" style="height:70%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:80%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:75%"></div></div>
+            </div>
+            <div class="d7-bottom-card">
+              <div class="stat-label">Best</div>
+              <div class="stat-value" style="color:var(--honey)">11.93</div>
+            </div>
+            <div class="d7-bottom-card">
+              <div class="stat-label">Mean</div>
+              <div class="stat-value">13.56</div>
+            </div>
+            <div class="d7-bottom-card">
+              <div class="stat-label">Efficiency</div>
+              <div class="stat-value" style="color:var(--grade-good)">74%</div>
+            </div>
+            <div class="d7-bottom-card">
+              <div class="stat-label">Moves</div>
+              <div class="stat-value">32</div>
+            </div>
+            <div class="d7-bottom-card">
+              <div class="stat-label">TPS</div>
+              <div class="stat-value">5.1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         ANALYSIS VIEW — v2 Key Moments
+         ========================================== -->
+    <div class="mockup-col">
+      <div class="mockup-label">Analysis View — Phase Boxes + Key Moments (chess.com style)</div>
+      <div class="mockup-frame">
+        <div class="d7-analysis">
+          <!-- Hero: Time + Phase Summary Boxes -->
+          <div class="d7-hero-bar">
+            <div class="d7-hero-row">
+              <div style="font-family:var(--font-mono);font-size:22px;font-weight:700;white-space:nowrap">12.847</div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <span class="badge badge-good">74%</span>
+                <span style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">32 moves · 5.1 TPS</span>
+              </div>
+            </div>
+            <!-- Phase boxes — 4 CFOP totals (F2L breakdown shown in key moments below) -->
+            <div class="d7-phase-boxes">
+              <div class="d7-phase-box">
+                <div class="box-label" style="color:var(--grade-great)">Cross</div>
+                <div class="box-time" style="color:var(--grade-great)">1.2s</div>
+                <div class="box-moves">5 moves</div>
+                <div class="box-grade" style="background:var(--grade-great)"></div>
+              </div>
+              <div class="d7-phase-box flagged">
+                <div class="box-label" style="color:var(--grade-needs-work)">F2L</div>
+                <div class="box-time" style="color:var(--grade-needs-work)">7.8s</div>
+                <div class="box-moves" style="color:var(--grade-needs-work)">19 moves · 4 pairs</div>
+                <div class="box-grade" style="background:var(--grade-needs-work)"></div>
+              </div>
+              <div class="d7-phase-box">
+                <div class="box-label" style="color:var(--text-secondary)">OLL</div>
+                <div class="box-time">1.6s</div>
+                <div class="box-moves">9 moves</div>
+                <div class="box-grade" style="background:var(--grade-good)"></div>
+              </div>
+              <div class="d7-phase-box">
+                <div class="box-label" style="color:var(--text-secondary)">PLL</div>
+                <div class="box-time">2.2s</div>
+                <div class="box-moves">14 moves</div>
+                <div class="box-grade" style="background:var(--grade-good)"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Split: Key Moments Feed + Coach Panel -->
+          <div class="d7-analysis-body">
+            <!-- LEFT: Key Moments Feed -->
+            <div class="d7-moments">
+              <div style="font-size:11px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">
+                Key Moments
+              </div>
+
+              <!-- Cross — OK (collapsed) -->
+              <div class="d7-moment-ok">
+                <div class="check">✓</div>
+                <span class="moment-phase">Cross</span>
+                <span class="moment-meta">1.2s · 5 mv</span>
+              </div>
+
+              <!-- F2L P1 — OK (collapsed) -->
+              <div class="d7-moment-ok">
+                <div class="check">✓</div>
+                <span class="moment-phase">F2L Pair 1</span>
+                <span class="moment-meta">2.1s · 6 mv</span>
+              </div>
+
+              <!-- F2L P2 — OK (collapsed) -->
+              <div class="d7-moment-ok">
+                <div class="check">✓</div>
+                <span class="moment-phase">F2L Pair 2</span>
+                <span class="moment-meta">1.8s · 5 mv</span>
+              </div>
+
+              <!-- F2L P3 — BAD (expanded with moves + fix) -->
+              <div class="d7-moment-bad">
+                <div class="d7-moment-bad-header">
+                  <div class="flag-icon">⚠</div>
+                  <span class="moment-phase">F2L Pair 3</span>
+                  <span class="moment-meta">2.4s · 11 mv (7 optimal)</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-bottom:6px">Wrong algorithm — unnecessary rotation costs +4 moves</div>
+                <div class="d7-moment-moves">
+                  <span class="d7-move">R</span>
+                  <span class="d7-move">U2</span>
+                  <span class="d7-move blunder">R'</span>
+                  <span class="d7-move blunder">F</span>
+                  <span class="d7-move">R</span>
+                  <span class="d7-move">U'</span>
+                  <span class="d7-move">R'</span>
+                  <span class="d7-move">U'</span>
+                  <span class="d7-move">R</span>
+                  <span class="d7-move">U</span>
+                  <span class="d7-move">R'</span>
+                </div>
+                <div class="d7-moment-fix">
+                  <span class="fix-label">Better →</span>
+                  <span class="fix-moves">R U R' U' R U R'</span>
+                  <span class="fix-saves">-4 mv · -0.8s</span>
+                </div>
+              </div>
+
+              <!-- F2L P4 — BRILLIANT (expanded — nice setup) -->
+              <div class="d7-moment-brilliant">
+                <div class="d7-moment-brilliant-header">
+                  <div class="star-icon">★</div>
+                  <span class="moment-phase">F2L Pair 4</span>
+                  <span class="moment-meta">1.5s · 4 mv</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-secondary)">
+                  Clean 3-move insert — your P2 solution left this pair perfectly set up. Near optimal.
+                </div>
+              </div>
+
+              <!-- OLL — OK with a positive note (collapsed but with note) -->
+              <div class="d7-moment-ok">
+                <div class="check">✓</div>
+                <span class="moment-phase">OLL</span>
+                <span class="moment-meta">1.6s · 9 mv · <span style="color:var(--primary)">0.3s recog ↑</span></span>
+              </div>
+
+              <!-- PLL — OK (collapsed) -->
+              <div class="d7-moment-ok">
+                <div class="check">✓</div>
+                <span class="moment-phase">PLL</span>
+                <span class="moment-meta">2.2s · 14 mv</span>
+              </div>
+
+              <!-- Summary line -->
+              <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-subtle);display:flex;align-items:center;gap:8px">
+                <div style="font-size:12px;color:var(--text-tertiary)">
+                  <span style="color:var(--grade-needs-work)">1 issue</span> · <span style="color:var(--primary)">1 brilliant</span> · 5 clean phases
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: AI Coach Panel -->
+            <div class="d7-coach-panel">
+              <div style="font-size:11px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">AI Coach</div>
+
+              <!-- Coach suggestion for the blunder -->
+              <div class="d7-coach-suggestion">
+                <div class="coach-header">
+                  <div class="icon">B</div>
+                  <div style="font-size:13px;font-weight:600;color:var(--primary)">F2L Pair 3</div>
+                </div>
+                <div class="coach-text" style="font-size:13px;margin-bottom:10px">
+                  The <span style="font-family:var(--font-mono);color:var(--grade-poor)">R' F</span> forces a rotation that costs ~0.4s. Completely unnecessary for this case.
+                </div>
+                <div class="d7-your-vs-optimal">
+                  <div class="d7-compare-box">
+                    <div class="compare-label" style="color:var(--grade-poor)">Yours (11 mv)</div>
+                    <div class="compare-moves" style="color:var(--text-tertiary)">R U2 <span style="color:var(--grade-poor);font-weight:700">R' F</span> R U' R' U' R U R'</div>
+                  </div>
+                  <div class="d7-compare-box">
+                    <div class="compare-label" style="color:var(--grade-great)">Optimal (7 mv)</div>
+                    <div class="compare-moves" style="color:var(--grade-great)">R U R' U' R U R'</div>
+                  </div>
+                </div>
+                <button class="btn-primary" style="width:100%;margin-top:10px;font-size:13px">Practice This Case</button>
+              </div>
+
+              <!-- Session pattern -->
+              <div style="background:var(--bg-elevated);border-radius:8px;padding:12px;margin-bottom:12px">
+                <div style="font-size:12px;font-weight:600;color:var(--text-tertiary);margin-bottom:6px">SESSION PATTERN</div>
+                <div class="coach-text" style="font-size:12px">
+                  This case appeared <strong>3 times</strong> this session. Avg <strong>11.3 moves</strong>. Your <strong style="color:var(--honey)">#1 target</strong>.
+                </div>
+              </div>
+
+              <!-- Drill queue -->
+              <div style="background:var(--bg-elevated);border-radius:8px;padding:12px;margin-bottom:12px">
+                <div style="font-size:12px;font-weight:600;color:var(--text-tertiary);margin-bottom:6px">DRILL QUEUE</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border-subtle)">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">F2L Case #31</div>
+                    <div style="font-size:11px;color:var(--text-tertiary)">3x · 11→7 moves</div>
+                  </div>
+                  <span class="badge badge-needs-work">Priority</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">OLL #37</div>
+                    <div style="font-size:11px;color:var(--text-tertiary)">Recog: 0.5s avg</div>
+                  </div>
+                  <span class="badge badge-good">Improve</span>
+                </div>
+              </div>
+
+              <!-- Ghost solve -->
+              <div style="text-align:center;padding:12px;border:1px dashed var(--border);border-radius:8px">
+                <div style="font-size:24px;margin-bottom:4px">▶</div>
+                <div style="font-size:12px;color:var(--text-tertiary)">Ghost Solve Replay</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div style="text-align:center;padding:48px 24px;color:var(--text-tertiary);font-size:13px">
+  BearCube Design Directions · Honey Bear Palette · Space Mono + Space Grotesk · Dark Mode
+</div>
+
+</body>
+</html>
