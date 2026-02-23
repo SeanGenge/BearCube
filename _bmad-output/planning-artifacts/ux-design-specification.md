@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 inputDocuments:
   - _bmad-output/planning-artifacts/product-brief-EzyWine_ProPlus-2026-02-22.md
   - _bmad-output/planning-artifacts/prd.md
@@ -986,3 +986,513 @@ flowchart TD
 3. **Never block the next solve** — Review card is passive; new scramble generates immediately regardless
 4. **Smart defaults, manual override** — AI recommends what to train, but users can always browse trainer categories manually
 5. **Free tier earns trust** — Genuinely useful tools build daily habit before upsell. The free experience should be better than competitors' paid offerings for non-AI features
+
+## Component Strategy
+
+### Design System Components (Ant Design v5)
+
+| Ant Design Component | BearCube Usage | Token Overrides |
+|---|---|---|
+| `Layout`, `Layout.Sider` | Page shell, solve list sidebar (collapsible) | Dark theme tokens, warm-tinted surface colors |
+| `Row`, `Col` | Phase boxes grid, bottom stat cards, trainer card grid | Responsive breakpoints for mobile |
+| `Button` | "Practice This Case", "View Full Analysis", ghost solve play | Primary = teal, ghost variant for secondary actions |
+| `Card` | Stat cards, trainer category tiles, drill summary | `bg-elevated` background, `border-subtle` border |
+| `Badge`, `Tag` | Grade badges (Great/Good/Needs Work), PB indicator, "New!" on trainers | Custom colors mapped to efficiency grades |
+| `Collapse` | Key moments feed (expandable panels per phase) | Custom panel headers for ok/bad/brilliant moment types |
+| `Drawer` | Coach panel on mobile, solve detail overlay | Slides from right, 320px width |
+| `List` | Solve list sidebar items | Virtualized with `react-window` for large sessions |
+| `ConfigProvider` | Nested density switching (spacious timer, compact analysis), theme tokens | Two nested providers: timer density + analysis density |
+| `Typography` | Headings, body text, labels | Space Grotesk mapped to token, warm off-white colors |
+| `Tooltip` | Move chip hover explanations, stat definitions | Dark elevated background |
+| `Segmented` | Trainer category tabs, session/all-time toggle | Teal active indicator |
+| `Empty` | No solves yet, no drills available | Custom illustration with bear theme |
+| `Skeleton` | Loading states for AI analysis, coach suggestions | Warm-tinted skeleton colors |
+| `message`, `notification` | PB celebrations, connection status, errors | Custom styling for PB (honey/amber burst) |
+
+### Custom Components
+
+#### TimerDisplay
+
+**Purpose:** Central timer showing current/completed solve time
+**Content:** Time in `MM:SS.mmm` format, inspection countdown, state indicator
+**States:**
+- Idle — showing last time or `0.000`
+- Inspection — 15s countdown, color shifts at 8s and 12s
+- Ready — spacebar held, turns green
+- Running — counting up, large prominent display
+- Stopped — final time displayed, triggers review card
+
+**Variants:** Full-size (timer view center), compact (analysis view header)
+**Implementation:** `font-variant-numeric: tabular-nums`, Space Mono, requestAnimationFrame for smooth counting. Smart cube integration via Web Bluetooth event listener for auto-start/stop.
+
+#### PhaseBar
+
+**Purpose:** Proportional colored bar showing CFOP phase time distribution
+**Content:** Segments colored by efficiency grade, proportional to phase duration
+**States:** Static (post-solve summary), interactive (clickable segments in analysis)
+**Variants:** Thin (8px, timer debrief), standard (10px, analysis header)
+**Implementation:** Flexbox with percentage widths. Each segment uses grade color variables. Optional time labels below via `phase-labels` companion.
+
+#### QuickReviewCard
+
+**Purpose:** Post-solve debrief that bridges timer to full analysis
+**Content:** Phase bar + key findings list (blunders, brilliants, improvements) + expand trigger
+**States:** Hidden (during solve), visible (slides up after solve), expanded (transitions to analysis view)
+**Actions:** Tap anywhere to expand full analysis
+**Implementation:** Ant Design `Card` with custom body. CSS transition for slide-up animation. Key findings rendered as a compact list with icon + colored text per finding type.
+
+#### PhaseBox
+
+**Purpose:** CFOP phase summary showing time and grade at a glance
+**Content:** Phase label, time, move count, grade dot
+**States:** Default, flagged (orange border for phases needing work), active (highlighted when clicked in analysis)
+**Variants:** 4-box layout (Cross, F2L total, OLL, PLL)
+**Implementation:** Ant Design `Card` with minimal padding, CSS custom properties for grade-based border color.
+
+#### KeyMoment
+
+**Purpose:** Single entry in the analysis key moments feed
+**Variants:**
+- **OK** — Collapsed single line: check icon + phase name + time/moves. Muted color
+- **Bad** — Expanded card: warning icon + phase name + description + move sequence with blunder highlights + fix suggestion inline
+- **Brilliant** — Expanded card: star icon + phase name + explanation of what was clever (setup, recognition speed, etc.)
+
+**Implementation:** Ant Design `Collapse.Panel` with custom `header` and `extra` renderers per variant. Bad variant contains `MoveChip` components and `MomentFix` sub-component.
+
+#### MoveChip
+
+**Purpose:** Individual move notation token with color grading
+**Content:** Move notation (R, U', F2, etc.)
+**States:**
+- Neutral — muted, most moves in clean phases
+- Great/Good — subtle bottom border color
+- Needs-work — orange text + border
+- Blunder — red text, red border, `!` indicator dot, clickable with hover elevation
+
+**Actions:** Clicking a blunder MoveChip updates the Coach panel with that move's suggestion
+**Implementation:** Styled `span` with grade-based CSS classes. Blunder variant has `onClick` handler and relative-positioned indicator badge.
+
+#### CoachSuggestion
+
+**Purpose:** AI coach explanation panel shown when a blunder is clicked
+**Content:** Explanation text, your moves vs optimal (side-by-side), savings summary, "Practice This Case" button
+**States:** Empty (no blunder selected), loaded (specific suggestion displayed)
+**Implementation:** Gradient background card with two `CompareBox` sub-components (yours vs optimal). Practice button triggers navigation to trainer with case pre-loaded.
+
+#### EfficiencyRing
+
+**Purpose:** Circular donut chart showing efficiency percentage
+**Content:** SVG circle with stroke-dasharray for percentage, center value text
+**Variants:** Large (100px, overall solve efficiency), mini (32px, per-phase rings in header/sidebar)
+**Implementation:** SVG with two `circle` elements (background track + colored progress arc). `stroke-dashoffset` calculated from percentage. Color determined by grade thresholds.
+
+#### SparklineBar
+
+**Purpose:** Miniature bar chart showing recent solve trends
+**Content:** 5-8 vertical bars representing recent Ao5/Ao12 values
+**Variants:** Inline (in bottom stat cards, 24px height)
+**Implementation:** Flexbox with `div` bars, height set as percentage of max value. Primary color with opacity. Hover reveals tooltip with actual value.
+
+#### ScrambleText
+
+**Purpose:** Display cube scramble notation
+**Content:** Standard notation string (R2 U' F2 D B2...)
+**Implementation:** Space Mono, `word-spacing: 0.15em`, `color: text-tertiary`. Centered above timer.
+
+#### TrainerCard
+
+**Purpose:** Selection tile for trainer categories and individual trainers
+**Content:** Icon/cube visualization, trainer name, optional description or "Last used" indicator
+**States:** Default, hover (slight elevation), active (selected/in-progress)
+**Variants:** Category card (larger, with description), individual trainer card (compact), recently used (horizontal scroll row)
+**Implementation:** Ant Design `Card` with `hoverable` prop, custom body layout. Grid layout for trainer home page.
+
+#### DrillSession
+
+**Purpose:** Active training interface for executing algorithm drills
+**Content:** Scramble for specific case, timer, solution reveal, progress indicator
+**States:** Ready (scramble shown), executing (timer running), review (solution shown, correct/incorrect), summary (session complete)
+**Actions:** Execute algorithm, reveal solution, mark correct/incorrect, next case, end session
+**Implementation:** Manages spaced repetition queue state. Timer component reused from main timer. Solution reveal uses `Collapse` or slide animation.
+
+#### CubeVisualizer
+
+**Purpose:** 3D interactive cube for ghost solve replay and trainer visuals
+**Content:** Rendered Rubik's cube showing current state, animatable moves
+**States:** Static (showing a position), playing (animating move sequence), paused, side-by-side (your solve vs optimal)
+**Variants:** Full-size (ghost solve replay), thumbnail (trainer card icons), inline (2-sided recognition view)
+**Implementation:** Three.js via React Three Fiber (`@react-three/fiber` + `@react-three/drei`). Cube state model mapping face colors to 3D mesh materials. Move animation queue with configurable playback speed. **Phase 2+ component** — not needed for MVP timer/analysis.
+
+### Component Implementation Strategy
+
+- All custom components built using Ant Design's CSS-in-JS token system (`createStyles` from `@ant-design/cssinjs`) for consistency
+- Components consume theme tokens via `useToken()` hook — no hardcoded colors
+- Each component is a standalone module in `/src/components/` with co-located styles
+- Grade colors accessed via tokens: `grade-great` / `grade-good` / `grade-needs-work` / `grade-poor`
+- Spacing follows the defined scale via `ConfigProvider` tokens
+- Typography uses `fontFamily` tokens (Space Mono for data, Space Grotesk for UI)
+
+### Implementation Roadmap
+
+**Phase 1 — Core Timer + Analysis (MVP):**
+- TimerDisplay — the core interaction
+- PhaseBar — used everywhere (timer, review card, analysis)
+- QuickReviewCard — the "aha moment" bridge
+- MoveChip — core of the analysis walkthrough
+- KeyMoment — chess.com-style key moments feed
+- ScrambleText — needed for every solve
+
+**Phase 2 — Coach + Stats:**
+- CoachSuggestion — AI coach panel
+- EfficiencyRing — per-phase and overall
+- PhaseBox — analysis header summary
+- SparklineBar — stat card trends
+
+**Phase 3 — Trainers:**
+- TrainerCard — trainer home selection
+- DrillSession — active training interface
+
+**Phase 4 — Visualization:**
+- CubeVisualizer — ghost solve replay, 3D trainer visuals
+
+## UX Consistency Patterns
+
+### Grade & Efficiency Color System
+
+The efficiency grading system is BearCube's most distinctive visual language. These colors are **reserved exclusively for solve analysis** — never used for UI semantics.
+
+**Grade Scale:**
+
+| Grade | Color | Hex | Usage Threshold | Meaning |
+|---|---|---|---|---|
+| Great | Green | `#22C55E` | 85-100% efficiency | Near-optimal execution |
+| Good | Yellow | `#EAB308` | 65-84% efficiency | Acceptable, minor room for improvement |
+| Needs Work | Orange | `#F97316` | 40-64% efficiency | Significant improvement opportunity |
+| Poor / Blunder | Red | `#EF4444` | 0-39% efficiency or unnecessary moves | Wrong algorithm or wasted moves |
+
+**Semantic UI Colors (shifted to avoid collision):**
+
+| Semantic | Color | Hex | Usage |
+|---|---|---|---|
+| Success | Blue | `#3B82F6` | Cube connected, account saved, settings updated |
+| Error | Rose | `#F43F5E` | Connection failed, network error, auth failure |
+| Warning | Amber | `#D97706` | Trial expiring, offline mode, degraded state |
+| Info | Teal (primary) | `#14B8A6` | Tips, coach suggestions, feature hints |
+
+**Application rules:**
+- Grade colors appear on: PhaseBar segments, MoveChip borders/text, EfficiencyRing arcs, KeyMoment icons, PhaseBox grade dots, Badge/Tag components
+- Grade colors always paired with text labels or icons (never color-only) for colorblind accessibility
+- Semantic colors appear on: toast notifications, connection indicators, form validation, system alerts
+- Never mix grade and semantic colors in the same component
+
+### Feedback Patterns
+
+#### PB Celebrations
+
+- **When:** New personal best for any tracked metric (single, Ao5, Ao12, Ao100, phase PBs)
+- **Visual:** Honey/amber burst animation — notification slides down from top with golden glow. Timer display briefly flashes amber
+- **Content:** "New Ao5 PB! 12.34" with previous PB shown below for comparison
+- **Duration:** Auto-dismiss after 4 seconds, or dismiss on next scramble start
+- **Sound:** Optional (user setting) — subtle positive chime
+- **Implementation:** Ant Design `notification` with custom amber styling and CSS keyframe animation
+
+#### Smart Cube Connection
+
+| State | Indicator | Location |
+|---|---|---|
+| Not connected | Gray dot + "Connect Cube" text | Top bar / settings |
+| Connecting | Pulsing blue dot + "Connecting..." | Top bar |
+| Connected | Solid green dot + cube model name | Top bar |
+| Connection lost | Red dot + "Reconnecting..." + auto-retry | Top bar + toast notification |
+
+Auto-reconnect on Bluetooth drop (3 retries with exponential backoff). If reconnect fails, show persistent banner with "Reconnect" button. Solves in progress when connection drops are preserved with data captured up to that point.
+
+#### AI Analysis Loading
+
+- **When:** After each smart cube solve, AI processes the solve for the review card
+- **Visual:** Skeleton loading in the QuickReviewCard area — subtle pulse animation on card shape
+- **Duration:** Target < 2 seconds. If > 3 seconds, show "Analyzing your solve..." text
+- **Behavior:** Timer is never blocked — user can start scrambling immediately. Review card populates asynchronously
+
+#### Error States
+
+All errors follow the same structure:
+1. What happened (clear, non-technical language)
+2. What the user can do about it
+3. Action button if applicable
+
+Examples:
+- "Couldn't analyze this solve. Your time was still saved." + "Retry Analysis" button
+- "Smart cube disconnected during solve. Moves captured up to R U R'." + "Reconnect" button
+- "You're offline. Solves will sync when you're back online." (no action needed)
+
+### Navigation Patterns
+
+#### View Structure
+
+BearCube has three primary views, all accessible from persistent navigation:
+
+| View | Nav Item | Purpose |
+|---|---|---|
+| Timer | Clock icon (default) | Core solve loop + quick review |
+| Trainer | Grid icon | Algorithm drills, inspection, recognition practice |
+| Stats | Chart icon | Session history, trends, long-term progress |
+
+Navigation location: Bottom tab bar on mobile, left icon rail on desktop (below solve list sidebar). Active indicator: teal underline (mobile) or teal left bar (desktop).
+
+#### Solve List Sidebar Persistence
+
+- Present in Timer view and Analysis view — never disappears during a session
+- Collapses to icon-only on screens < 1200px, fully hidden on mobile (accessible via swipe or hamburger)
+- Clicking a solve in the list loads that solve's review card (timer view) or full analysis (analysis view)
+- Active solve highlighted with `primary-subtle` background
+
+#### Timer to Analysis Transition
+
+- Triggered by tapping the QuickReviewCard
+- Timer center area transforms into analysis content (phase boxes + key moments + coach panel)
+- Solve list sidebar persists — no page navigation, feels like expanding in place
+- "Back to Timer" via back arrow or escape key — returns to timer with last scramble state
+
+#### Trainer Entry Points
+
+Three ways to enter trainer, each pre-configures the session:
+1. **From Coach panel** ("Practice This Case") — opens trainer with specific case pre-loaded
+2. **From "What Should I Learn Next"** — opens AI-recommended drill queue
+3. **From Trainer nav** — opens trainer home with category browsing
+
+### Empty & Loading States
+
+#### First Session (No Data)
+
+| Context | Empty State |
+|---|---|
+| Timer — no solves yet | Timer at `0.000`, scramble shown, bottom stat cards show `--` |
+| Solve list — empty | "Do your first solve!" with subtle arrow pointing to timer |
+| Analysis — no data | Not accessible until first solve is completed |
+| Trainer — no recommendations | "Complete a few solves so I can see what to recommend" + browse manually option |
+| Stats — no history | "Your stats will appear here after your first session" |
+
+Empty states always tell the user what to do next, never just "No data."
+
+#### Loading States
+
+| Context | Loading Pattern |
+|---|---|
+| AI analysis processing | Skeleton card in QuickReviewCard area, timer fully usable |
+| Coach suggestion generating | Skeleton in coach panel, key moments feed usable |
+| Solve list loading | Skeleton rows (3-5 items) |
+| Trainer scramble generating | Spinner in scramble area only |
+| Ghost solve replay loading | Cube placeholder with loading spinner overlay |
+
+Never block the entire screen. Load progressively — show what's available, skeleton what's loading.
+
+### Data Display Patterns
+
+#### Time Formatting
+
+| Context | Format | Example |
+|---|---|---|
+| Timer display (running/stopped) | `SS.mmm` or `M:SS.mmm` | `12.847` or `1:02.847` |
+| Solve list | `SS.mmm` | `12.847` |
+| Phase times | `S.Ss` | `1.2s` |
+| Stat cards (Ao5, Ao12) | `SS.mm` | `13.24` |
+| Delta from average | `±S.mm` | `-0.71` or `+0.46` |
+
+Rules:
+- Always use Space Mono for time values
+- Always use `tabular-nums` for stable column alignment
+- Deltas: green for negative (faster), red for positive (slower)
+- PB times displayed in honey/amber color
+
+#### Move Count & TPS
+
+| Context | Format | Example |
+|---|---|---|
+| Total moves | `N moves` or `N mv` (compact) | `32 moves` or `32 mv` |
+| Phase moves | `N mv` | `5 mv` |
+| TPS | `N.N` | `5.1` |
+| Move comparison | `N→N moves` | `11→7 moves` |
+
+#### Efficiency Display
+
+- Always shown as percentage: `74%`
+- Always color-coded by grade
+- Always accompanied by a label or context (never bare number)
+- EfficiencyRing for visual emphasis, plain text for inline/compact contexts
+
+#### Comparison Patterns
+
+When showing "yours vs optimal" (coach suggestion, ghost solve):
+- Left side = your version (in grade color matching quality)
+- Right side = optimal (always in green/great color)
+- Problematic moves in your version are highlighted (bold, underlined, or contrasting color)
+- Savings shown below: "Saves: 4 moves · ~0.8s"
+
+### Interaction Patterns
+
+#### Tap/Click Hierarchy
+
+| Priority | Visual Treatment | Example |
+|---|---|---|
+| Primary action | Teal filled button | "Practice This Case" |
+| Secondary action | Ghost button (border only) | "View Ghost Solve" |
+| Tertiary / link | Teal text, no button | "View Full Analysis →" |
+| Destructive | Rose text or ghost button | "Delete Session" |
+
+#### Hover & Active States
+
+- Cards: subtle border color change + slight shadow elevation
+- Blunder MoveChips: background darkens + slight translateY(-1px)
+- Solve list rows: background shifts to `bg-spotlight`
+- Phase boxes: border color shifts to `text-tertiary`
+- Interactive elements always show `cursor: pointer`
+
+#### Keyboard Support
+
+| Key | Action |
+|---|---|
+| Spacebar | Hold to ready timer, release to start (timer view) |
+| Escape | Return from analysis to timer, close drawer |
+| Arrow Up/Down | Navigate solve list |
+| Enter | Expand selected solve's analysis |
+| 1-7 | Jump to phase in analysis (Cross, P1-P4, OLL, PLL) |
+
+## Responsive Design & Accessibility
+
+### Responsive Strategy
+
+**Desktop-first approach.** Cubers practice at desks with a cube in hand and laptop in front — this is the primary experience. Mobile is secondary, used for quick sessions, reviewing stats on the go, or at competitions.
+
+**Desktop (1024px+) — Primary Experience:**
+- Full three-zone layout: solve list sidebar (160px) + main content area + coach panel (320px on analysis)
+- Bottom stat cards bar visible at all times
+- Keyboard shortcuts fully active (spacebar timer, 1-7 phase jump, arrow keys for solve list)
+- Hover states on all interactive elements
+- Smart cube connection via Web Bluetooth (Chrome/Edge only)
+
+**Tablet (768px-1023px) — Touch-Optimized Desktop:**
+- Solve list sidebar collapses to icon-only (solve numbers only, no times) — expandable on tap
+- Coach panel becomes a Drawer (slides in from right) instead of fixed column
+- Bottom stat cards reduce to 4 (Ao5, Ao12, Best, Efficiency) — full set accessible via horizontal scroll
+- Touch targets enlarged to 44px minimum
+- Timer display remains large and centered
+
+**Mobile (320px-767px) — Quick Session Mode:**
+- Solve list sidebar fully hidden — accessible via hamburger or swipe from left edge
+- Timer is full-screen with scramble above, review card slides up from bottom as a bottom sheet
+- Analysis view is a separate full-screen page (not in-place expansion) — navigate via review card tap
+- Coach panel is a full-screen Drawer
+- Bottom stat cards become a single scrollable row
+- Bottom tab navigation: Timer / Trainer / Stats
+- Phase boxes in analysis stack 2x2 grid instead of horizontal row
+
+### Breakpoint Strategy
+
+| Breakpoint | Width | Layout Changes |
+|---|---|---|
+| `xs` | < 576px | Single column, bottom sheet review card, stacked phase boxes |
+| `sm` | 576-767px | Single column, slightly wider cards, 2x2 phase boxes |
+| `md` | 768-1023px | Collapsible sidebar (icon-only), drawer coach panel |
+| `lg` | 1024-1439px | Full sidebar + main content, drawer coach panel |
+| `xl` | 1440px+ | Full sidebar + main content + fixed coach panel |
+
+Implementation: Ant Design's built-in responsive grid system (`Row`/`Col` with `xs`, `sm`, `md`, `lg`, `xl` props). `Layout.Sider` with `collapsedWidth` and `breakpoint` props for sidebar behavior.
+
+### Component Responsive Behavior
+
+| Component | Desktop | Tablet | Mobile |
+|---|---|---|---|
+| TimerDisplay | 64px font | 56px font | 48px font |
+| Solve list sidebar | Full (160px) | Icon-only (48px) | Hidden (drawer) |
+| QuickReviewCard | Floating card below timer | Floating card below timer | Bottom sheet (slides up) |
+| Analysis view | In-place expansion | In-place expansion | Full-screen page |
+| Coach panel | Fixed right column (320px) | Right drawer | Full-screen drawer |
+| PhaseBox grid | 4 in a row | 4 in a row | 2x2 grid |
+| Bottom stat cards | 7 cards in row | 4 cards + scroll | Scrollable single row |
+| Key moments feed | Full width with padding | Full width | Full width, compact |
+| Trainer card grid | 3-4 columns | 2-3 columns | 2 columns |
+
+### Accessibility Strategy
+
+**Target: WCAG 2.1 Level AA compliance.**
+
+#### Color & Contrast
+
+- Minimum contrast ratio 4.5:1 for body text on dark surfaces (`#F5F0EB` on `#141210` = 13.8:1)
+- Minimum contrast ratio 3:1 for large text (timer display, stat values)
+- All grade colors meet 3:1 against dark backgrounds (green `#22C55E` on `#141210` = 5.2:1, yellow `#EAB308` = 6.1:1, orange `#F97316` = 4.8:1, red `#EF4444` = 4.1:1)
+- Grade colors never used as sole indicator — always paired with text label, icon, or shape
+- High contrast mode support: increase all borders to 2px, add underlines to grade-colored text
+
+#### Keyboard Navigation
+
+- Full keyboard operability for all core flows (timer, analysis, trainer)
+- Visible focus indicators: 2px teal outline with 2px offset on all focusable elements
+- Skip links: "Skip to timer" and "Skip to main content" available on all pages
+- Focus trapping in drawers and modals — Escape key always closes
+- Logical tab order follows visual layout (sidebar → main → coach panel)
+
+#### Screen Reader Support
+
+- Semantic HTML throughout: `<main>`, `<nav>`, `<aside>`, `<section>`, `<h1>`-`<h6>`
+- ARIA labels on all custom components:
+  - TimerDisplay: `aria-live="polite"` for time updates, `aria-label="Solve timer, current time 12.847 seconds"`
+  - PhaseBar: `role="img"` with `aria-label` describing all phases and grades
+  - EfficiencyRing: `role="img"` with `aria-label="Efficiency 74 percent, rated good"`
+  - MoveChip (blunder): `role="button"` with `aria-label="Move R prime, blunder, click for coach suggestion"`
+  - KeyMoment: `role="listitem"` with descriptive `aria-label` per moment type
+- Solve list: `role="listbox"` with `aria-activedescendant` for current selection
+- Grade system: Screen readers announce grade name, not just color ("74 percent, rated good" not "74 percent, yellow")
+
+#### Touch & Motor
+
+- Minimum touch target 44x44px on all interactive elements
+- MoveChip touch targets expanded with padding on mobile (visual size can be smaller, tap area 44px)
+- No hover-dependent functionality — all hover info available via tap/long-press on mobile
+- Timer input: spacebar on desktop, full-screen tap area on mobile
+- Adequate spacing between interactive elements to prevent mis-taps (minimum 8px gap)
+
+#### Motion & Preferences
+
+- `prefers-reduced-motion` media query respected:
+  - PB celebration animation replaced with static notification
+  - Phase bar segment transitions disabled
+  - Bottom sheet slide-up becomes instant appearance
+  - Ghost solve replay defaults to step-through mode (not animation)
+- No auto-playing animations that can't be paused
+
+### Testing Strategy
+
+**Automated:**
+- `eslint-plugin-jsx-a11y` for catching accessibility issues at build time
+- Lighthouse accessibility audit as part of CI (target score: 90+)
+- `axe-core` integration in component tests for runtime ARIA validation
+
+**Manual:**
+- Keyboard-only navigation walkthrough of all core flows monthly
+- VoiceOver (macOS/iOS) and NVDA (Windows) screen reader testing for critical paths
+- Color blindness simulation (Chrome DevTools) for all grade-colored components
+- Real device testing on: iPhone SE (small), iPhone 15 (standard), iPad, Android mid-range
+
+### Implementation Guidelines
+
+**CSS:**
+- Use `rem` for font sizes (accessibility — respects browser font size preference)
+- Spacing and layout use Ant Design's token system (px-based, scales via ConfigProvider density)
+- Touch targets use `px` (44px is an absolute physical size requirement)
+- Use `%` or `fr` for layout column widths
+- Media queries follow Ant Design breakpoints for consistency
+- `font-variant-numeric: tabular-nums` on all numeric displays
+
+**HTML:**
+- Semantic elements first, ARIA only when semantic HTML is insufficient
+- All images have `alt` text (cube visualizations described meaningfully)
+- Form inputs (settings, manual time entry) have associated `<label>` elements
+- `lang="en"` on `<html>` element
+
+**JavaScript/React:**
+- Focus management on view transitions (analysis expansion moves focus to first phase box)
+- `useReducedMotion()` hook for animation preferences
+- Ant Design `ConfigProvider` direction prop for potential future RTL support
+- `react-window` for virtualized lists (performance + accessibility combined)
